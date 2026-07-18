@@ -62,11 +62,48 @@ function computeLayout(data, width, height) {
   return { rows, cols, cellWidth, cellHeight, positions };
 }
 
+// src/palette.ts
+var import_d3_scale_chromatic = require("d3-scale-chromatic");
+var PALETTES = {
+  viridis: import_d3_scale_chromatic.interpolateViridis,
+  plasma: import_d3_scale_chromatic.interpolatePlasma,
+  cividis: import_d3_scale_chromatic.interpolateCividis,
+  magma: import_d3_scale_chromatic.interpolateMagma,
+  inferno: import_d3_scale_chromatic.interpolateInferno
+};
+function isValidPalette(value) {
+  return typeof value === "string" && value in PALETTES;
+}
+function getColorScale(palette) {
+  return PALETTES[palette];
+}
+
+// src/normalize.ts
+function normalizeValues(data) {
+  const values = data.map((d) => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min;
+  const result = /* @__PURE__ */ new Map();
+  for (const cell of data) {
+    const t = range === 0 ? 0.5 : (cell.value - min) / range;
+    result.set(cell, t);
+  }
+  return result;
+}
+
 // src/index.ts
 var Heatmap = class {
-  constructor(el) {
+  constructor(el, options = {}) {
     this.el = el;
     this.data = [];
+    const palette = options.palette ?? "viridis";
+    if (!isValidPalette(palette)) {
+      throw new Error(
+        `[hueglint] Invalid palette "${palette}". Expected one of: viridis, plasma, cividis, magma, inferno.`
+      );
+    }
+    this.palette = palette;
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.setAttribute("width", "100%");
     this.svg.setAttribute("height", "100%");
@@ -81,14 +118,17 @@ var Heatmap = class {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
     const layout = computeLayout(this.data, width, height);
+    const colorScale = getColorScale(this.palette);
+    const normalized = normalizeValues(this.data);
     for (const cell of this.data) {
       const pos = layout.positions.get(cell);
+      const t = normalized.get(cell);
       const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       rect.setAttribute("x", String(pos.x));
       rect.setAttribute("y", String(pos.y));
       rect.setAttribute("width", String(layout.cellWidth));
       rect.setAttribute("height", String(layout.cellHeight));
-      rect.setAttribute("fill", "#888");
+      rect.setAttribute("fill", colorScale(t));
       this.svg.appendChild(rect);
     }
   }
