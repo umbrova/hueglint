@@ -4,6 +4,7 @@ import { computeLayout } from './layout';
 import { isValidPalette, getColorScale, Palette } from './palette';
 import { normalizeValues } from './normalize';
 import { buildAccessibleTable } from './a11y';
+import { setupRovingTabindex, GridCellRef } from './keyboard';
 
 export class Heatmap {
   private static instanceCount = 0;
@@ -14,6 +15,7 @@ export class Heatmap {
   private data: HeatmapCell[] = [];
   private context: HeatmapContext = {};
   private palette: Palette;
+  private cleanupKeyboard: (() => void) | null = null;
 
   constructor(private el: HTMLElement, options: HeatmapOptions = {}) {
     const palette = options.palette ?? 'viridis';
@@ -27,10 +29,8 @@ export class Heatmap {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
-    // The visual chart is presentational only — its real, authoritative
-    // data lives in the table below, so screen readers should skip
-    // the SVG entirely rather than trying to interpret shapes and colors.
-    this.svg.setAttribute('aria-hidden', 'true');
+    // No aria-hidden here — cells are individually focusable and
+    // labeled below, so the SVG must stay in the accessibility tree.
     this.el.appendChild(this.svg);
   }
 
@@ -41,12 +41,14 @@ export class Heatmap {
   }
 
   private render(): void {
+    this.cleanupKeyboard?.();
     this.svg.innerHTML = '';
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
     const layout = computeLayout(this.data, width, height);
     const colorScale = getColorScale(this.palette);
     const normalized = normalizeValues(this.data);
+    const gridCells: GridCellRef[] = [];
 
     for (const cell of this.data) {
       const pos = layout.positions.get(cell)!;
@@ -57,8 +59,20 @@ export class Heatmap {
       rect.setAttribute('width', String(layout.cellWidth));
       rect.setAttribute('height', String(layout.cellHeight));
       rect.setAttribute('fill', colorScale(t));
+      rect.setAttribute(
+        'aria-label',
+        `${this.context.rowLabel ?? 'Row'} ${cell.row}, ${this.context.colLabel ?? 'Column'} ${cell.col}: ${cell.value}`
+      );
       this.svg.appendChild(rect);
+
+      gridCells.push({
+        el: rect,
+        rowIndex: layout.rows.indexOf(cell.row),
+        colIndex: layout.cols.indexOf(cell.col),
+      });
     }
+
+    this.cleanupKeyboard = setupRovingTabindex(gridCells);
 
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
@@ -66,6 +80,7 @@ export class Heatmap {
   }
 
   destroy(): void {
+    this.cleanupKeyboard?.();
     this.svg.remove();
     this.table?.remove();
   }

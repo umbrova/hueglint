@@ -92,11 +92,109 @@ function normalizeValues(data) {
   return result;
 }
 
+// src/a11y.ts
+var VISUALLY_HIDDEN_STYLE = "position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;";
+function buildAccessibleTable(data, context, id) {
+  const table = document.createElement("table");
+  table.id = id;
+  table.style.cssText = VISUALLY_HIDDEN_STYLE;
+  const caption = document.createElement("caption");
+  caption.textContent = context.description ?? `${context.valueLabel ?? "Value"} by ${context.rowLabel ?? "row"} and ${context.colLabel ?? "column"}`;
+  table.appendChild(caption);
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  [context.rowLabel ?? "Row", context.colLabel ?? "Column", context.valueLabel ?? "Value"].forEach(
+    (label) => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      th.scope = "col";
+      headRow.appendChild(th);
+    }
+  );
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+  const tbody = document.createElement("tbody");
+  for (const cell of data) {
+    const tr = document.createElement("tr");
+    [cell.row, cell.col, cell.value].forEach((v) => {
+      const td = document.createElement("td");
+      td.textContent = String(v);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  return table;
+}
+
+// src/keyboard.ts
+var FOCUS_RING_COLOR = "#534AB7";
+function setupRovingTabindex(cells) {
+  if (cells.length === 0) return () => {
+  };
+  const grid = /* @__PURE__ */ new Map();
+  cells.forEach((c) => grid.set(`${c.rowIndex},${c.colIndex}`, c));
+  let active = cells[0];
+  cells.forEach((c) => c.el.setAttribute("tabindex", c === active ? "0" : "-1"));
+  function moveTo(next) {
+    if (!next) return;
+    active.el.setAttribute("tabindex", "-1");
+    active = next;
+    active.el.setAttribute("tabindex", "0");
+    active.el.focus();
+  }
+  function handleKeydown(e) {
+    const { rowIndex, colIndex } = active;
+    switch (e.key) {
+      case "ArrowRight":
+        e.preventDefault();
+        moveTo(grid.get(`${rowIndex},${colIndex + 1}`));
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        moveTo(grid.get(`${rowIndex},${colIndex - 1}`));
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        moveTo(grid.get(`${rowIndex + 1},${colIndex}`));
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        moveTo(grid.get(`${rowIndex - 1},${colIndex}`));
+        break;
+    }
+  }
+  const cleanupFns = [];
+  cells.forEach((c) => {
+    const onFocus = () => {
+      c.el.setAttribute("stroke", FOCUS_RING_COLOR);
+      c.el.setAttribute("stroke-width", "2");
+    };
+    const onBlur = () => {
+      c.el.removeAttribute("stroke");
+      c.el.removeAttribute("stroke-width");
+    };
+    c.el.addEventListener("keydown", handleKeydown);
+    c.el.addEventListener("focus", onFocus);
+    c.el.addEventListener("blur", onBlur);
+    cleanupFns.push(() => {
+      c.el.removeEventListener("keydown", handleKeydown);
+      c.el.removeEventListener("focus", onFocus);
+      c.el.removeEventListener("blur", onBlur);
+    });
+  });
+  return () => cleanupFns.forEach((fn) => fn());
+}
+
 // src/index.ts
-var Heatmap = class {
+var _Heatmap = class _Heatmap {
   constructor(el, options = {}) {
     this.el = el;
+    this.id = `hueglint-${_Heatmap.instanceCount++}`;
+    this.table = null;
     this.data = [];
+    this.context = {};
+    this.cleanupKeyboard = null;
     const palette = options.palette ?? "viridis";
     if (!isValidPalette(palette)) {
       throw new Error(
@@ -109,17 +207,20 @@ var Heatmap = class {
     this.svg.setAttribute("height", "100%");
     this.el.appendChild(this.svg);
   }
-  load(data, _context) {
+  load(data, context = {}) {
     this.data = validateData(data);
+    this.context = context;
     this.render();
   }
   render() {
+    this.cleanupKeyboard?.();
     this.svg.innerHTML = "";
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
     const layout = computeLayout(this.data, width, height);
     const colorScale = getColorScale(this.palette);
     const normalized = normalizeValues(this.data);
+    const gridCells = [];
     for (const cell of this.data) {
       const pos = layout.positions.get(cell);
       const t = normalized.get(cell);
@@ -129,13 +230,30 @@ var Heatmap = class {
       rect.setAttribute("width", String(layout.cellWidth));
       rect.setAttribute("height", String(layout.cellHeight));
       rect.setAttribute("fill", colorScale(t));
+      rect.setAttribute(
+        "aria-label",
+        `${this.context.rowLabel ?? "Row"} ${cell.row}, ${this.context.colLabel ?? "Column"} ${cell.col}: ${cell.value}`
+      );
       this.svg.appendChild(rect);
+      gridCells.push({
+        el: rect,
+        rowIndex: layout.rows.indexOf(cell.row),
+        colIndex: layout.cols.indexOf(cell.col)
+      });
     }
+    this.cleanupKeyboard = setupRovingTabindex(gridCells);
+    if (this.table) this.el.removeChild(this.table);
+    this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
+    this.el.appendChild(this.table);
   }
   destroy() {
-    this.el.removeChild(this.svg);
+    this.cleanupKeyboard?.();
+    this.svg.remove();
+    this.table?.remove();
   }
 };
+_Heatmap.instanceCount = 0;
+var Heatmap = _Heatmap;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   Heatmap
