@@ -175,6 +175,7 @@ ${valueLabel}: ${cell.value}`;
 var TooltipController = class {
   constructor(instanceId, formatter = defaultFormatter) {
     this.formatter = formatter;
+    this.activeTarget = null;
     this.id = `${instanceId}-tooltip`;
     this.el = document.createElement("div");
     this.el.id = this.id;
@@ -186,11 +187,21 @@ var TooltipController = class {
     this.el.textContent = this.formatter(cell, context);
     target.setAttribute("aria-describedby", this.id);
     this.el.style.display = "block";
+    this.activeTarget = target;
     this.position(target);
   }
   hide(target) {
+    if (target && target !== this.activeTarget) return;
     this.el.style.display = "none";
-    target?.removeAttribute("aria-describedby");
+    this.activeTarget?.removeAttribute("aria-describedby");
+    this.activeTarget = null;
+  }
+  toggle(target, cell, context) {
+    if (this.activeTarget === target) {
+      this.hide(target);
+    } else {
+      this.show(target, cell, context);
+    }
   }
   position(target) {
     const rect = target.getBoundingClientRect();
@@ -214,17 +225,26 @@ function attachTooltipEvents(cells, tooltip, context) {
   cells.forEach(({ el, cell }) => {
     const onShow = () => tooltip.show(el, cell, context);
     const onHide = () => tooltip.hide(el);
+    const onClick = (e) => {
+      e.stopPropagation();
+      tooltip.toggle(el, cell, context);
+    };
     el.addEventListener("mouseenter", onShow);
     el.addEventListener("mouseleave", onHide);
     el.addEventListener("focus", onShow);
     el.addEventListener("blur", onHide);
+    el.addEventListener("click", onClick);
     cleanupFns.push(() => {
       el.removeEventListener("mouseenter", onShow);
       el.removeEventListener("mouseleave", onHide);
       el.removeEventListener("focus", onShow);
       el.removeEventListener("blur", onHide);
+      el.removeEventListener("click", onClick);
     });
   });
+  const onDocumentClick = () => tooltip.hide();
+  document.addEventListener("click", onDocumentClick);
+  cleanupFns.push(() => document.removeEventListener("click", onDocumentClick));
   return () => cleanupFns.forEach((fn) => fn());
 }
 

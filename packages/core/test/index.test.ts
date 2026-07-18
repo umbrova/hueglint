@@ -212,4 +212,47 @@ describe('Heatmap', () => {
     const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
     expect(parseFloat(tip.style.top)).toBeGreaterThanOrEqual(25);
   });
+
+  it('toggles the tooltip open and closed on repeated clicks of the same cell (touch/tap)', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
+    expect(tip.style.display).toBe('block');
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(tip.style.display).toBe('none');
+  });
+
+  it('dismisses the tooltip when tapping/clicking outside the chart', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const describedById = rect.getAttribute('aria-describedby')!;
+    const tip = document.getElementById(describedById)!;
+    expect(tip.style.display).toBe('block');
+
+    document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(tip.style.display).toBe('none');
+  });
+
+  it('does not immediately dismiss when the triggering click itself bubbles to the document', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
+    // If stopPropagation() weren't working, the same click event would
+    // reach the document listener and immediately hide this.
+    expect(tip.style.display).toBe('block');
+  });
+
 });
