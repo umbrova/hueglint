@@ -10,6 +10,8 @@ const defaultFormatter: TooltipFormatter = (cell, context) => {
 export class TooltipController {
   readonly id: string;
   private el: HTMLDivElement;
+  private activeTarget: SVGRectElement | null = null;
+  private onScroll: (() => void) | null = null;
 
   constructor(instanceId: string, private formatter: TooltipFormatter = defaultFormatter) {
     this.id = `${instanceId}-tooltip`;
@@ -23,16 +25,37 @@ export class TooltipController {
     document.body.appendChild(this.el);
   }
 
-  show(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
+show(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
     this.el.textContent = this.formatter(cell, context);
     target.setAttribute('aria-describedby', this.id);
     this.el.style.display = 'block';
+    this.activeTarget = target;
     this.position(target);
+
+    // capture: true catches scroll on any ancestor scroll container,
+    // not just window — a chart inside a scrollable card, common in
+    // dashboard layouts, needs this to still reposition correctly.
+    this.onScroll = () => this.position(target);
+    window.addEventListener('scroll', this.onScroll, { capture: true, passive: true });
   }
 
   hide(target?: SVGRectElement): void {
+    if (target && target !== this.activeTarget) return;
     this.el.style.display = 'none';
-    target?.removeAttribute('aria-describedby');
+    this.activeTarget?.removeAttribute('aria-describedby');
+    this.activeTarget = null;
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll, { capture: true });
+      this.onScroll = null;
+    }
+  }
+
+  toggle(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
+    if (this.activeTarget === target) {
+      this.hide(target);
+    } else {
+      this.show(target, cell, context);
+    }
   }
 
   private position(target: SVGRectElement): void {
@@ -53,6 +76,7 @@ export class TooltipController {
   }
 
   destroy(): void {
+    if (this.onScroll) window.removeEventListener('scroll', this.onScroll, { capture: true });
     this.el.remove();
   }
 }
@@ -63,19 +87,35 @@ export function attachTooltipEvents(
   context: HeatmapContext
 ): () => void {
   const cleanupFns: (() => void)[] = [];
+
   cells.forEach(({ el, cell }) => {
     const onShow = () => tooltip.show(el, cell, context);
     const onHide = () => tooltip.hide(el);
+    const onClick = (e: Event) => {
+      // Stop this click from also reaching the document-level
+      // outside-click listener registered below.
+      e.stopPropagation();
+      tooltip.toggle(el, cell, context);
+    };
     el.addEventListener('mouseenter', onShow);
     el.addEventListener('mouseleave', onHide);
     el.addEventListener('focus', onShow);
     el.addEventListener('blur', onHide);
+    el.addEventListener('click', onClick);
     cleanupFns.push(() => {
       el.removeEventListener('mouseenter', onShow);
       el.removeEventListener('mouseleave', onHide);
       el.removeEventListener('focus', onShow);
       el.removeEventListener('blur', onHide);
+      el.removeEventListener('click', onClick);
     });
   });
+
+  // Tap/click anywhere else in the document dismisses the open tooltip —
+  // registered once here, not per-cell.
+  const onDocumentClick = () => tooltip.hide();
+  document.addEventListener('click', onDocumentClick);
+  cleanupFns.push(() => document.removeEventListener('click', onDocumentClick));
+
   return () => cleanupFns.forEach((fn) => fn());
 }
