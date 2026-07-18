@@ -1,3 +1,5 @@
+import { Palette } from './palette';
+
 export interface HeatmapCell {
   row: string | number;
   col: string | number;
@@ -10,4 +12,8 @@ export interface HeatmapContext {
   colLabel?: string;
   valueLabel?: string;
   description?: string;
+}
+
+export interface HeatmapOptions {
+  palette?: Palette;
 }
