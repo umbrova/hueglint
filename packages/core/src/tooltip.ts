@@ -11,6 +11,7 @@ export class TooltipController {
   readonly id: string;
   private el: HTMLDivElement;
   private activeTarget: SVGRectElement | null = null;
+  private onScroll: (() => void) | null = null;
 
   constructor(instanceId: string, private formatter: TooltipFormatter = defaultFormatter) {
     this.id = `${instanceId}-tooltip`;
@@ -24,21 +25,29 @@ export class TooltipController {
     document.body.appendChild(this.el);
   }
 
-  show(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
+show(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
     this.el.textContent = this.formatter(cell, context);
     target.setAttribute('aria-describedby', this.id);
     this.el.style.display = 'block';
     this.activeTarget = target;
     this.position(target);
+
+    // capture: true catches scroll on any ancestor scroll container,
+    // not just window — a chart inside a scrollable card, common in
+    // dashboard layouts, needs this to still reposition correctly.
+    this.onScroll = () => this.position(target);
+    window.addEventListener('scroll', this.onScroll, { capture: true, passive: true });
   }
 
   hide(target?: SVGRectElement): void {
-    // Guard: a stale mouseleave/blur from a cell that's no longer
-    // active shouldn't hide a tooltip a newer interaction already opened.
     if (target && target !== this.activeTarget) return;
     this.el.style.display = 'none';
     this.activeTarget?.removeAttribute('aria-describedby');
     this.activeTarget = null;
+    if (this.onScroll) {
+      window.removeEventListener('scroll', this.onScroll, { capture: true });
+      this.onScroll = null;
+    }
   }
 
   toggle(target: SVGRectElement, cell: HeatmapCell, context: HeatmapContext): void {
@@ -67,6 +76,7 @@ export class TooltipController {
   }
 
   destroy(): void {
+    if (this.onScroll) window.removeEventListener('scroll', this.onScroll, { capture: true });
     this.el.remove();
   }
 }

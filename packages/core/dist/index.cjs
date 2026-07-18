@@ -196,6 +196,7 @@ var TooltipController = class {
   constructor(instanceId, formatter = defaultFormatter) {
     this.formatter = formatter;
     this.activeTarget = null;
+    this.onScroll = null;
     this.id = `${instanceId}-tooltip`;
     this.el = document.createElement("div");
     this.el.id = this.id;
@@ -209,12 +210,18 @@ var TooltipController = class {
     this.el.style.display = "block";
     this.activeTarget = target;
     this.position(target);
+    this.onScroll = () => this.position(target);
+    window.addEventListener("scroll", this.onScroll, { capture: true, passive: true });
   }
   hide(target) {
     if (target && target !== this.activeTarget) return;
     this.el.style.display = "none";
     this.activeTarget?.removeAttribute("aria-describedby");
     this.activeTarget = null;
+    if (this.onScroll) {
+      window.removeEventListener("scroll", this.onScroll, { capture: true });
+      this.onScroll = null;
+    }
   }
   toggle(target, cell, context) {
     if (this.activeTarget === target) {
@@ -237,6 +244,7 @@ var TooltipController = class {
     this.el.style.top = `${top}px`;
   }
   destroy() {
+    if (this.onScroll) window.removeEventListener("scroll", this.onScroll, { capture: true });
     this.el.remove();
   }
 };

@@ -255,4 +255,43 @@ describe('Heatmap', () => {
     expect(tip.style.display).toBe('block');
   });
 
+  it('repositions the tooltip on scroll while it is open', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+
+    let callCount = 0;
+    rect.getBoundingClientRect = () => {
+      callCount++;
+      return { top: 100, bottom: 120, left: 50, right: 100, width: 50, height: 20, x: 50, y: 100, toJSON() {} } as DOMRect;
+    };
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const callsAfterShow = callCount;
+
+    window.dispatchEvent(new Event('scroll'));
+    expect(callCount).toBeGreaterThan(callsAfterShow);
+  });
+
+  it('removes the scroll listener once the tooltip is hidden', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+
+    let callCount = 0;
+    rect.getBoundingClientRect = () => {
+      callCount++;
+      return { top: 100, bottom: 120, left: 50, right: 100, width: 50, height: 20, x: 50, y: 100, toJSON() {} } as DOMRect;
+    };
+
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true })); // show
+    rect.dispatchEvent(new MouseEvent('click', { bubbles: true })); // hide again
+    const callsAfterHide = callCount;
+
+    window.dispatchEvent(new Event('scroll'));
+    expect(callCount).toBe(callsAfterHide); // scroll after hide should do nothing
+  });
+
 });
