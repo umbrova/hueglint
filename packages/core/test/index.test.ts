@@ -1,5 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect } from 'vitest';
 import { Heatmap } from '../src/index';
+
+afterEach(() => {
+  document.body.innerHTML = '';
+});
 
 describe('Heatmap', () => {
   it('renders one rect per cell', () => {
@@ -161,5 +165,51 @@ describe('Heatmap', () => {
     chart.load([{ row: 'Mon', col: '8am', value: 42 }], { rowLabel: 'Day', colLabel: 'Hour' });
     const rect = el.querySelector('rect')!;
     expect(rect.getAttribute('aria-label')).toBe('Day Mon, Hour 8am: 42');
+  });
+
+  it('sets aria-describedby while visible, removes it on hide', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+    rect.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    expect(rect.hasAttribute('aria-describedby')).toBe(true);
+    rect.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+    expect(rect.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('shows tooltip content on hover and hides on mouseleave', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 42 }], { valueLabel: 'Requests' });
+    const rect = el.querySelector('rect')!;
+    rect.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
+    expect(tip.textContent).toContain('42');
+    expect(tip.textContent).toContain('Requests');
+    rect.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+    expect(tip.style.display).toBe('none');
+  });
+
+  it('supports a custom tooltipFormatter', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el, { tooltipFormatter: (cell) => `Custom: ${cell.value}` });
+    chart.load([{ row: 'Mon', col: '8am', value: 7 }]);
+    const rect = el.querySelector('rect')!;
+    rect.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
+    expect(tip.textContent).toBe('Custom: 7');
+  });
+
+  it('flips below the cell when there is no room above (mocked layout)', () => {
+    const el = document.createElement('div');
+    const chart = new Heatmap(el);
+    chart.load([{ row: 'Mon', col: '8am', value: 1 }]);
+    const rect = el.querySelector('rect')!;
+    rect.getBoundingClientRect = () =>
+      ({ top: 5, bottom: 25, left: 100, right: 150, width: 50, height: 20, x: 100, y: 5, toJSON() {} }) as DOMRect;
+    rect.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    const tip = document.getElementById(rect.getAttribute('aria-describedby')!)!;
+    expect(parseFloat(tip.style.top)).toBeGreaterThanOrEqual(25);
   });
 });

@@ -1,4 +1,6 @@
 import { Palette } from './palette';
+import { TooltipFormatter } from './tooltip';
+
 
 export interface HeatmapCell {
   row: string | number;
@@ -16,4 +18,5 @@ export interface HeatmapContext {
 
 export interface HeatmapOptions {
   palette?: Palette;
+  tooltipFormatter?: TooltipFormatter;
 }
