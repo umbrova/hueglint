@@ -3,10 +3,16 @@ import { validateData } from './validate';
 import { computeLayout } from './layout';
 import { isValidPalette, getColorScale, Palette } from './palette';
 import { normalizeValues } from './normalize';
+import { buildAccessibleTable } from './a11y';
 
 export class Heatmap {
+  private static instanceCount = 0;
+  private readonly id = `hueglint-${Heatmap.instanceCount++}`;
+
   private svg: SVGSVGElement;
+  private table: HTMLTableElement | null = null;
   private data: HeatmapCell[] = [];
+  private context: HeatmapContext = {};
   private palette: Palette;
 
   constructor(private el: HTMLElement, options: HeatmapOptions = {}) {
@@ -21,11 +27,16 @@ export class Heatmap {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
+    // The visual chart is presentational only — its real, authoritative
+    // data lives in the table below, so screen readers should skip
+    // the SVG entirely rather than trying to interpret shapes and colors.
+    this.svg.setAttribute('aria-hidden', 'true');
     this.el.appendChild(this.svg);
   }
 
-  load(data: unknown, _context?: HeatmapContext): void {
+  load(data: unknown, context: HeatmapContext = {}): void {
     this.data = validateData(data);
+    this.context = context;
     this.render();
   }
 
@@ -48,9 +59,14 @@ export class Heatmap {
       rect.setAttribute('fill', colorScale(t));
       this.svg.appendChild(rect);
     }
+
+    if (this.table) this.el.removeChild(this.table);
+    this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
+    this.el.appendChild(this.table);
   }
 
   destroy(): void {
-    this.el.removeChild(this.svg);
+    this.svg.remove();
+    this.table?.remove();
   }
 }
