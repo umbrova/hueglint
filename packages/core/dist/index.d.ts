@@ -12,11 +12,16 @@ interface HeatmapOptions {
 
 declare class Heatmap {
     private el;
+    private static instanceCount;
+    private readonly id;
     private svg;
+    private table;
     private data;
+    private context;
     private palette;
+    private cleanupKeyboard;
     constructor(el: HTMLElement, options?: HeatmapOptions);
-    load(data: unknown, _context?: HeatmapContext): void;
+    load(data: unknown, context?: HeatmapContext): void;
     private render;
     destroy(): void;
 }
