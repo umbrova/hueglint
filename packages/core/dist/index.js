@@ -166,6 +166,68 @@ function setupRovingTabindex(cells) {
   return () => cleanupFns.forEach((fn) => fn());
 }
 
+// src/tooltip.ts
+var defaultFormatter = (cell, context) => {
+  const valueLabel = context.valueLabel ?? "Value";
+  return `${cell.row}, ${cell.col}
+${valueLabel}: ${cell.value}`;
+};
+var TooltipController = class {
+  constructor(instanceId, formatter = defaultFormatter) {
+    this.formatter = formatter;
+    this.id = `${instanceId}-tooltip`;
+    this.el = document.createElement("div");
+    this.el.id = this.id;
+    this.el.setAttribute("role", "tooltip");
+    this.el.style.cssText = "position:fixed;pointer-events:none;background:#fff;border:1px solid #ccc;border-radius:4px;padding:6px 10px;font-size:13px;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:2147483647;display:none;max-width:220px;";
+    document.body.appendChild(this.el);
+  }
+  show(target, cell, context) {
+    this.el.textContent = this.formatter(cell, context);
+    target.setAttribute("aria-describedby", this.id);
+    this.el.style.display = "block";
+    this.position(target);
+  }
+  hide(target) {
+    this.el.style.display = "none";
+    target?.removeAttribute("aria-describedby");
+  }
+  position(target) {
+    const rect = target.getBoundingClientRect();
+    const tipRect = this.el.getBoundingClientRect();
+    const gap = 8;
+    let top = rect.top - tipRect.height - gap;
+    if (top < 0) {
+      top = rect.bottom + gap;
+    }
+    let left = rect.left + rect.width / 2 - tipRect.width / 2;
+    left = Math.max(gap, Math.min(left, window.innerWidth - tipRect.width - gap));
+    this.el.style.left = `${left}px`;
+    this.el.style.top = `${top}px`;
+  }
+  destroy() {
+    this.el.remove();
+  }
+};
+function attachTooltipEvents(cells, tooltip, context) {
+  const cleanupFns = [];
+  cells.forEach(({ el, cell }) => {
+    const onShow = () => tooltip.show(el, cell, context);
+    const onHide = () => tooltip.hide(el);
+    el.addEventListener("mouseenter", onShow);
+    el.addEventListener("mouseleave", onHide);
+    el.addEventListener("focus", onShow);
+    el.addEventListener("blur", onHide);
+    cleanupFns.push(() => {
+      el.removeEventListener("mouseenter", onShow);
+      el.removeEventListener("mouseleave", onHide);
+      el.removeEventListener("focus", onShow);
+      el.removeEventListener("blur", onHide);
+    });
+  });
+  return () => cleanupFns.forEach((fn) => fn());
+}
+
 // src/index.ts
 var _Heatmap = class _Heatmap {
   constructor(el, options = {}) {
@@ -175,6 +237,7 @@ var _Heatmap = class _Heatmap {
     this.data = [];
     this.context = {};
     this.cleanupKeyboard = null;
+    this.cleanupTooltip = null;
     const palette = options.palette ?? "viridis";
     if (!isValidPalette(palette)) {
       throw new Error(
@@ -182,6 +245,7 @@ var _Heatmap = class _Heatmap {
       );
     }
     this.palette = palette;
+    this.tooltip = new TooltipController(this.id, options.tooltipFormatter);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.setAttribute("width", "100%");
     this.svg.setAttribute("height", "100%");
@@ -194,6 +258,7 @@ var _Heatmap = class _Heatmap {
   }
   render() {
     this.cleanupKeyboard?.();
+    this.cleanupTooltip?.();
     this.svg.innerHTML = "";
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
@@ -201,6 +266,7 @@ var _Heatmap = class _Heatmap {
     const colorScale = getColorScale(this.palette);
     const normalized = normalizeValues(this.data);
     const gridCells = [];
+    const tooltipCells = [];
     for (const cell of this.data) {
       const pos = layout.positions.get(cell);
       const t = normalized.get(cell);
@@ -220,14 +286,18 @@ var _Heatmap = class _Heatmap {
         rowIndex: layout.rows.indexOf(cell.row),
         colIndex: layout.cols.indexOf(cell.col)
       });
+      tooltipCells.push({ el: rect, cell });
     }
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
+    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context);
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
     this.el.appendChild(this.table);
   }
   destroy() {
     this.cleanupKeyboard?.();
+    this.cleanupTooltip?.();
+    this.tooltip.destroy();
     this.svg.remove();
     this.table?.remove();
   }

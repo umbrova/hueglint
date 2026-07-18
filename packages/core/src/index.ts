@@ -5,6 +5,7 @@ import { isValidPalette, getColorScale, Palette } from './palette';
 import { normalizeValues } from './normalize';
 import { buildAccessibleTable } from './a11y';
 import { setupRovingTabindex, GridCellRef } from './keyboard';
+import { TooltipController, attachTooltipEvents } from './tooltip';
 
 export class Heatmap {
   private static instanceCount = 0;
@@ -12,10 +13,12 @@ export class Heatmap {
 
   private svg: SVGSVGElement;
   private table: HTMLTableElement | null = null;
+  private tooltip: TooltipController;
   private data: HeatmapCell[] = [];
   private context: HeatmapContext = {};
   private palette: Palette;
   private cleanupKeyboard: (() => void) | null = null;
+  private cleanupTooltip: (() => void) | null = null;
 
   constructor(private el: HTMLElement, options: HeatmapOptions = {}) {
     const palette = options.palette ?? 'viridis';
@@ -25,12 +28,11 @@ export class Heatmap {
       );
     }
     this.palette = palette;
+    this.tooltip = new TooltipController(this.id, options.tooltipFormatter);
 
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
-    // No aria-hidden here — cells are individually focusable and
-    // labeled below, so the SVG must stay in the accessibility tree.
     this.el.appendChild(this.svg);
   }
 
@@ -42,6 +44,7 @@ export class Heatmap {
 
   private render(): void {
     this.cleanupKeyboard?.();
+    this.cleanupTooltip?.();
     this.svg.innerHTML = '';
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
@@ -49,6 +52,7 @@ export class Heatmap {
     const colorScale = getColorScale(this.palette);
     const normalized = normalizeValues(this.data);
     const gridCells: GridCellRef[] = [];
+    const tooltipCells: { el: SVGRectElement; cell: HeatmapCell }[] = [];
 
     for (const cell of this.data) {
       const pos = layout.positions.get(cell)!;
@@ -70,9 +74,11 @@ export class Heatmap {
         rowIndex: layout.rows.indexOf(cell.row),
         colIndex: layout.cols.indexOf(cell.col),
       });
+      tooltipCells.push({ el: rect, cell });
     }
 
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
+    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context);
 
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
@@ -81,6 +87,8 @@ export class Heatmap {
 
   destroy(): void {
     this.cleanupKeyboard?.();
+    this.cleanupTooltip?.();
+    this.tooltip.destroy();
     this.svg.remove();
     this.table?.remove();
   }
