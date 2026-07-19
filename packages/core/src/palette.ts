@@ -4,6 +4,7 @@ import {
   interpolateCividis,
   interpolateMagma,
   interpolateInferno,
+  interpolatePuOr,
 } from 'd3-scale-chromatic';
 
 export type Palette = 'viridis' | 'plasma' | 'cividis' | 'magma' | 'inferno';
@@ -22,4 +23,8 @@ export function isValidPalette(value: unknown): value is Palette {
 
 export function getColorScale(palette: Palette): (t: number) => string {
   return PALETTES[palette];
+}
+
+export function getDivergingColorScale(): (t: number) => string {
+  return interpolatePuOr;
 }

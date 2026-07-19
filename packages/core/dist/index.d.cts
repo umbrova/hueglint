@@ -23,6 +23,7 @@ declare class Heatmap {
     private el;
     private static instanceCount;
     private readonly id;
+    private options;
     private svg;
     private table;
     private tooltip;
@@ -31,9 +32,12 @@ declare class Heatmap {
     private palette;
     private cleanupKeyboard;
     private cleanupTooltip;
+    private diffs;
     constructor(el: HTMLElement, options?: HeatmapOptions);
     load(data: unknown, context?: HeatmapContext): void;
     private render;
+    loadDiff(current: unknown, previous: unknown, context?: HeatmapContext): void;
+    private renderDiff;
     destroy(): void;
 }
 

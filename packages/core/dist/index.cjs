@@ -9,9 +9,9 @@ var __export = (target, all) => {
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    for (let key2 of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key2) && key2 !== except)
+        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
   }
   return to;
 };
@@ -77,6 +77,9 @@ function isValidPalette(value) {
 function getColorScale(palette) {
   return PALETTES[palette];
 }
+function getDivergingColorScale() {
+  return import_d3_scale_chromatic.interpolatePuOr;
+}
 
 // src/normalize.ts
 function normalizeValues(data) {
@@ -117,6 +120,39 @@ function buildAccessibleTable(data, context, id) {
   for (const cell of data) {
     const tr = document.createElement("tr");
     [cell.row, cell.col, cell.value].forEach((v) => {
+      const td = document.createElement("td");
+      td.textContent = String(v);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  return table;
+}
+function buildDiffAccessibleTable(diffs, context, id) {
+  const table = document.createElement("table");
+  table.id = id;
+  table.style.cssText = VISUALLY_HIDDEN_STYLE;
+  const caption = document.createElement("caption");
+  caption.textContent = context.description ?? "Comparison between two datasets";
+  table.appendChild(caption);
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  [context.rowLabel ?? "Row", context.colLabel ?? "Column", "Previous", "Current", "Change"].forEach(
+    (label) => {
+      const th = document.createElement("th");
+      th.textContent = label;
+      th.scope = "col";
+      headRow.appendChild(th);
+    }
+  );
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+  const tbody = document.createElement("tbody");
+  for (const d of diffs) {
+    const tr = document.createElement("tr");
+    const sign = d.delta >= 0 ? "+" : "";
+    [d.row, d.col, d.previousValue, d.currentValue, `${sign}${d.delta}`].forEach((v) => {
       const td = document.createElement("td");
       td.textContent = String(v);
       tr.appendChild(td);
@@ -186,15 +222,62 @@ function setupRovingTabindex(cells) {
   return () => cleanupFns.forEach((fn) => fn());
 }
 
+// src/diff.ts
+var key = (row, col) => `${row}::${col}`;
+function computeDiff(current, previous) {
+  const prevMap = new Map(previous.map((c) => [key(c.row, c.col), c]));
+  const results = [];
+  const matched = /* @__PURE__ */ new Set();
+  for (const cell of current) {
+    const k = key(cell.row, cell.col);
+    const prev = prevMap.get(k);
+    if (!prev) {
+      console.warn(
+        `[hueglint] Cell (${cell.row}, ${cell.col}) has no matching comparison value \u2014 skipped from diff.`
+      );
+      continue;
+    }
+    matched.add(k);
+    results.push({
+      row: cell.row,
+      col: cell.col,
+      currentValue: cell.value,
+      previousValue: prev.value,
+      delta: cell.value - prev.value
+    });
+  }
+  previous.forEach((c) => {
+    if (!matched.has(key(c.row, c.col))) {
+      console.warn(
+        `[hueglint] Comparison cell (${c.row}, ${c.col}) has no matching current value \u2014 skipped from diff.`
+      );
+    }
+  });
+  if (results.length === 0) {
+    throw new Error(
+      "[hueglint] loadDiff(): no matching (row, col) pairs between current and comparison data."
+    );
+  }
+  return results;
+}
+function normalizeDiffs(diffs) {
+  const maxAbs = Math.max(...diffs.map((d) => Math.abs(d.delta)), 0);
+  const result = /* @__PURE__ */ new Map();
+  for (const d of diffs) {
+    result.set(d, maxAbs === 0 ? 0.5 : 0.5 + d.delta / maxAbs * 0.5);
+  }
+  return result;
+}
+function defaultDiffTooltip(d, context) {
+  const label = context.valueLabel ?? "Value";
+  const sign = d.delta >= 0 ? "+" : "";
+  return `${d.row}, ${d.col}
+${label}: ${d.previousValue} \u2192 ${d.currentValue} (${sign}${d.delta})`;
+}
+
 // src/tooltip.ts
-var defaultFormatter = (cell, context) => {
-  const valueLabel = context.valueLabel ?? "Value";
-  return `${cell.row}, ${cell.col}
-${valueLabel}: ${cell.value}`;
-};
 var TooltipController = class {
-  constructor(instanceId, formatter = defaultFormatter) {
-    this.formatter = formatter;
+  constructor(instanceId) {
     this.activeTarget = null;
     this.onScroll = null;
     this.id = `${instanceId}-tooltip`;
@@ -204,8 +287,8 @@ var TooltipController = class {
     this.el.style.cssText = "position:fixed;pointer-events:none;background:#fff;border:1px solid #ccc;border-radius:4px;padding:6px 10px;font-size:13px;white-space:pre-line;box-shadow:0 2px 8px rgba(0,0,0,0.15);z-index:2147483647;display:none;max-width:220px;";
     document.body.appendChild(this.el);
   }
-  show(target, cell, context) {
-    this.el.textContent = this.formatter(cell, context);
+  show(target, content) {
+    this.el.textContent = content;
     target.setAttribute("aria-describedby", this.id);
     this.el.style.display = "block";
     this.activeTarget = target;
@@ -223,11 +306,11 @@ var TooltipController = class {
       this.onScroll = null;
     }
   }
-  toggle(target, cell, context) {
+  toggle(target, content) {
     if (this.activeTarget === target) {
       this.hide(target);
     } else {
-      this.show(target, cell, context);
+      this.show(target, content);
     }
   }
   position(target) {
@@ -235,9 +318,7 @@ var TooltipController = class {
     const tipRect = this.el.getBoundingClientRect();
     const gap = 8;
     let top = rect.top - tipRect.height - gap;
-    if (top < 0) {
-      top = rect.bottom + gap;
-    }
+    if (top < 0) top = rect.bottom + gap;
     let left = rect.left + rect.width / 2 - tipRect.width / 2;
     left = Math.max(gap, Math.min(left, window.innerWidth - tipRect.width - gap));
     this.el.style.left = `${left}px`;
@@ -248,14 +329,45 @@ var TooltipController = class {
     this.el.remove();
   }
 };
-function attachTooltipEvents(cells, tooltip, context) {
+var defaultFormatter = (cell, context) => `${cell.row}, ${cell.col}
+${context.valueLabel ?? "Value"}: ${cell.value}`;
+function attachTooltipEvents(cells, tooltip, context, formatter = defaultFormatter) {
   const cleanupFns = [];
   cells.forEach(({ el, cell }) => {
-    const onShow = () => tooltip.show(el, cell, context);
+    const content = () => formatter(cell, context);
+    const onShow = () => tooltip.show(el, content());
     const onHide = () => tooltip.hide(el);
     const onClick = (e) => {
       e.stopPropagation();
-      tooltip.toggle(el, cell, context);
+      tooltip.toggle(el, content());
+    };
+    el.addEventListener("mouseenter", onShow);
+    el.addEventListener("mouseleave", onHide);
+    el.addEventListener("focus", onShow);
+    el.addEventListener("blur", onHide);
+    el.addEventListener("click", onClick);
+    cleanupFns.push(() => {
+      el.removeEventListener("mouseenter", onShow);
+      el.removeEventListener("mouseleave", onHide);
+      el.removeEventListener("focus", onShow);
+      el.removeEventListener("blur", onHide);
+      el.removeEventListener("click", onClick);
+    });
+  });
+  const onDocumentClick = () => tooltip.hide();
+  document.addEventListener("click", onDocumentClick);
+  cleanupFns.push(() => document.removeEventListener("click", onDocumentClick));
+  return () => cleanupFns.forEach((fn) => fn());
+}
+function attachDiffTooltipEvents(cells, tooltip, context) {
+  const cleanupFns = [];
+  cells.forEach(({ el, diff }) => {
+    const content = () => defaultDiffTooltip(diff, context);
+    const onShow = () => tooltip.show(el, content());
+    const onHide = () => tooltip.hide(el);
+    const onClick = (e) => {
+      e.stopPropagation();
+      tooltip.toggle(el, content());
     };
     el.addEventListener("mouseenter", onShow);
     el.addEventListener("mouseleave", onHide);
@@ -286,6 +398,8 @@ var _Heatmap = class _Heatmap {
     this.context = {};
     this.cleanupKeyboard = null;
     this.cleanupTooltip = null;
+    this.diffs = null;
+    this.options = options;
     const palette = options.palette ?? "viridis";
     if (!isValidPalette(palette)) {
       throw new Error(
@@ -293,7 +407,7 @@ var _Heatmap = class _Heatmap {
       );
     }
     this.palette = palette;
-    this.tooltip = new TooltipController(this.id, options.tooltipFormatter);
+    this.tooltip = new TooltipController(this.id);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.setAttribute("width", "100%");
     this.svg.setAttribute("height", "100%");
@@ -337,9 +451,52 @@ var _Heatmap = class _Heatmap {
       tooltipCells.push({ el: rect, cell });
     }
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
-    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context);
+    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context, this.options.tooltipFormatter);
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
+    this.el.appendChild(this.table);
+  }
+  loadDiff(current, previous, context = {}) {
+    const validCurrent = validateData(current);
+    const validPrevious = validateData(previous);
+    this.diffs = computeDiff(validCurrent, validPrevious);
+    this.context = context;
+    this.renderDiff();
+  }
+  renderDiff() {
+    if (!this.diffs) return;
+    this.cleanupKeyboard?.();
+    this.cleanupTooltip?.();
+    this.svg.innerHTML = "";
+    const width = this.el.clientWidth || 400;
+    const height = this.el.clientHeight || 300;
+    const layout = computeLayout(this.diffs, width, height);
+    const colorScale = getDivergingColorScale();
+    const normalized = normalizeDiffs(this.diffs);
+    const gridCells = [];
+    const tooltipCells = [];
+    for (const d of this.diffs) {
+      const pos = layout.positions.get(d);
+      const t = normalized.get(d);
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", String(pos.x));
+      rect.setAttribute("y", String(pos.y));
+      rect.setAttribute("width", String(layout.cellWidth));
+      rect.setAttribute("height", String(layout.cellHeight));
+      rect.setAttribute("fill", colorScale(t));
+      const sign = d.delta >= 0 ? "+" : "";
+      rect.setAttribute(
+        "aria-label",
+        `${this.context.rowLabel ?? "Row"} ${d.row}, ${this.context.colLabel ?? "Column"} ${d.col}: changed from ${d.previousValue} to ${d.currentValue} (${sign}${d.delta})`
+      );
+      this.svg.appendChild(rect);
+      gridCells.push({ el: rect, rowIndex: layout.rows.indexOf(d.row), colIndex: layout.cols.indexOf(d.col) });
+      tooltipCells.push({ el: rect, diff: d });
+    }
+    this.cleanupKeyboard = setupRovingTabindex(gridCells);
+    this.cleanupTooltip = attachDiffTooltipEvents(tooltipCells, this.tooltip, this.context);
+    if (this.table) this.el.removeChild(this.table);
+    this.table = buildDiffAccessibleTable(this.diffs, this.context, `${this.id}-table`);
     this.el.appendChild(this.table);
   }
   destroy() {
