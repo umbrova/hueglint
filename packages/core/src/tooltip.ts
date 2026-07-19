@@ -68,8 +68,14 @@ export class TooltipController {
 
 export type TooltipFormatter = (cell: HeatmapCell, context: HeatmapContext) => string;
 
-const defaultFormatter: TooltipFormatter = (cell, context) =>
-  `${cell.row}, ${cell.col}\n${context.valueLabel ?? 'Value'}: ${cell.value}`;
+const defaultFormatter: TooltipFormatter = (cell, context) => {
+  const label = context.valueLabel ?? 'Value';
+  const base = `${cell.row}, ${cell.col}\n${label}: ${cell.value}`;
+  if (cell.meta?.aggregated) {
+    return `${base}\n(average of ${String(cell.meta.count)} cells)`;
+  }
+  return base;
+};
 
 export function attachTooltipEvents(
   cells: { el: SVGRectElement; cell: HeatmapCell }[],
@@ -115,7 +121,10 @@ export function attachDiffTooltipEvents(
     const content = () => defaultDiffTooltip(diff, context);
     const onShow = () => tooltip.show(el, content());
     const onHide = () => tooltip.hide(el);
-    const onClick = (e: Event) => { e.stopPropagation(); tooltip.toggle(el, content()); };
+    const onClick = (e: Event) => {
+      e.stopPropagation();
+      tooltip.toggle(el, content());
+    };
     el.addEventListener('mouseenter', onShow);
     el.addEventListener('mouseleave', onHide);
     el.addEventListener('focus', onShow);

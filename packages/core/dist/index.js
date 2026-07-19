@@ -310,8 +310,16 @@ var TooltipController = class {
     this.el.remove();
   }
 };
-var defaultFormatter = (cell, context) => `${cell.row}, ${cell.col}
-${context.valueLabel ?? "Value"}: ${cell.value}`;
+var defaultFormatter = (cell, context) => {
+  const label = context.valueLabel ?? "Value";
+  const base = `${cell.row}, ${cell.col}
+${label}: ${cell.value}`;
+  if (cell.meta?.aggregated) {
+    return `${base}
+(average of ${String(cell.meta.count)} cells)`;
+  }
+  return base;
+};
 function attachTooltipEvents(cells, tooltip, context, formatter = defaultFormatter) {
   const cleanupFns = [];
   cells.forEach(({ el, cell }) => {
@@ -415,6 +423,62 @@ function buildErrorState(message) {
   return el;
 }
 
+// src/aggregate.ts
+var MIN_TOUCH_SIZE = 44;
+function computeAggregationFactor(width, height, rowCount, colCount) {
+  if (rowCount === 0 || colCount === 0) return 1;
+  const naiveCellWidth = width / colCount;
+  const naiveCellHeight = height / rowCount;
+  const factorW = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellWidth));
+  const factorH = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellHeight));
+  return Math.max(factorW, factorH);
+}
+function chunk(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+function labelForGroup(group) {
+  return group.length === 1 ? String(group[0]) : `${group[0]}\u2013${group[group.length - 1]}`;
+}
+function aggregateData(data, rows, cols, factor) {
+  if (factor <= 1) return data;
+  const rowGroups = chunk(rows, factor);
+  const colGroups = chunk(cols, factor);
+  const rowGroupIndex = /* @__PURE__ */ new Map();
+  rowGroups.forEach((group, i) => group.forEach((r) => rowGroupIndex.set(r, i)));
+  const colGroupIndex = /* @__PURE__ */ new Map();
+  colGroups.forEach((group, i) => group.forEach((c) => colGroupIndex.set(c, i)));
+  const buckets = /* @__PURE__ */ new Map();
+  for (const cell of data) {
+    const ri = rowGroupIndex.get(cell.row);
+    const ci = colGroupIndex.get(cell.col);
+    const key2 = `${ri}::${ci}`;
+    const existing = buckets.get(key2);
+    if (existing) {
+      existing.sum += cell.value;
+      existing.count += 1;
+    } else {
+      buckets.set(key2, {
+        sum: cell.value,
+        count: 1,
+        rowLabel: labelForGroup(rowGroups[ri]),
+        colLabel: labelForGroup(colGroups[ci])
+      });
+    }
+  }
+  const result = [];
+  buckets.forEach((b) => {
+    result.push({
+      row: b.rowLabel,
+      col: b.colLabel,
+      value: b.sum / b.count,
+      meta: { aggregated: true, count: b.count }
+    });
+  });
+  return result;
+}
+
 // src/index.ts
 var _Heatmap = class _Heatmap {
   constructor(el, options = {}) {
@@ -422,8 +486,11 @@ var _Heatmap = class _Heatmap {
     this.id = `hueglint-${_Heatmap.instanceCount++}`;
     this.table = null;
     this.stateEl = null;
+    this.resizeScheduled = false;
+    this.rawData = [];
     this.data = [];
     this.diffs = null;
+    this.mode = null;
     this.context = {};
     this.cleanupKeyboard = null;
     this.cleanupTooltip = null;
@@ -441,24 +508,37 @@ var _Heatmap = class _Heatmap {
     this.svg.setAttribute("height", "100%");
     this.el.appendChild(this.svg);
     this.showState(buildLoadingState());
+    this.resizeObserver = new ResizeObserver(() => {
+      if (this.resizeScheduled) return;
+      this.resizeScheduled = true;
+      requestAnimationFrame(() => {
+        this.resizeScheduled = false;
+        if (this.mode === "normal") this.applyAggregationAndRender();
+        else if (this.mode === "diff") this.renderDiff();
+      });
+    });
+    this.resizeObserver.observe(this.el);
   }
   load(data, context = {}) {
     let validated;
     try {
       validated = validateData(data);
     } catch (err) {
+      this.mode = null;
       this.handleError(err);
       return;
     }
     this.context = context;
     if (validated.length === 0) {
-      this.data = [];
+      this.mode = null;
+      this.rawData = [];
       this.showState(buildEmptyState());
       return;
     }
-    this.data = validated;
+    this.mode = "normal";
+    this.rawData = validated;
     this.showState(null);
-    this.render();
+    this.applyAggregationAndRender();
   }
   loadDiff(current, previous, context = {}) {
     let validCurrent;
@@ -467,11 +547,13 @@ var _Heatmap = class _Heatmap {
       validCurrent = validateData(current);
       validPrevious = validateData(previous);
     } catch (err) {
+      this.mode = null;
       this.handleError(err);
       return;
     }
     this.context = context;
     if (validCurrent.length === 0 && validPrevious.length === 0) {
+      this.mode = null;
       this.diffs = null;
       this.showState(buildEmptyState());
       return;
@@ -480,12 +562,23 @@ var _Heatmap = class _Heatmap {
     try {
       diffs = computeDiff(validCurrent, validPrevious);
     } catch (err) {
+      this.mode = null;
       this.handleError(err);
       return;
     }
+    this.mode = "diff";
     this.diffs = diffs;
     this.showState(null);
     this.renderDiff();
+  }
+  applyAggregationAndRender() {
+    const width = this.el.clientWidth || 400;
+    const height = this.el.clientHeight || 300;
+    const rows = Array.from(new Set(this.rawData.map((d) => d.row)));
+    const cols = Array.from(new Set(this.rawData.map((d) => d.col)));
+    const factor = computeAggregationFactor(width, height, rows.length, cols.length);
+    this.data = aggregateData(this.rawData, rows, cols, factor);
+    this.render();
   }
   handleError(error) {
     console.error("[hueglint]", error);
@@ -590,6 +683,7 @@ var _Heatmap = class _Heatmap {
     this.el.appendChild(this.table);
   }
   destroy() {
+    this.resizeObserver.disconnect();
     this.cleanupKeyboard?.();
     this.cleanupTooltip?.();
     this.tooltip.destroy();

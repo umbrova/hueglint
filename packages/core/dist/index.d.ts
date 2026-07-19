@@ -28,8 +28,12 @@ declare class Heatmap {
     private table;
     private tooltip;
     private stateEl;
+    private resizeObserver;
+    private resizeScheduled;
+    private rawData;
     private data;
     private diffs;
+    private mode;
     private context;
     private palette;
     private options;
@@ -38,6 +42,7 @@ declare class Heatmap {
     constructor(el: HTMLElement, options?: HeatmapOptions);
     load(data: unknown, context?: HeatmapContext): void;
     loadDiff(current: unknown, previous: unknown, context?: HeatmapContext): void;
+    private applyAggregationAndRender;
     private handleError;
     private showState;
     private render;
