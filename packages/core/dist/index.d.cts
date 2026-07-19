@@ -1,5 +1,13 @@
 type Palette = 'viridis' | 'plasma' | 'cividis' | 'magma' | 'inferno';
 
+interface DiffResult {
+    row: string | number;
+    col: string | number;
+    currentValue: number;
+    previousValue: number;
+    delta: number;
+}
+
 type TooltipFormatter = (cell: HeatmapCell, context: HeatmapContext) => string;
 
 interface HeatmapCell {
@@ -42,6 +50,7 @@ declare class Heatmap {
     constructor(el: HTMLElement, options?: HeatmapOptions);
     load(data: unknown, context?: HeatmapContext): void;
     loadDiff(current: unknown, previous: unknown, context?: HeatmapContext): void;
+    update(row: string | number, col: string | number, value: number): void;
     private applyAggregationAndRender;
     private handleError;
     private showState;
@@ -50,4 +59,4 @@ declare class Heatmap {
     destroy(): void;
 }
 
-export { Heatmap };
+export { type DiffResult, Heatmap, type HeatmapCell, type HeatmapContext, type HeatmapOptions, type Palette };
