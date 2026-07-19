@@ -1,4 +1,5 @@
 import { HeatmapCell, HeatmapContext } from './types';
+import { DiffResult } from './diff';
 
 // Standard "visually hidden but still accessible" pattern — content is
 // removed from the visual layout entirely, but stays in the accessibility
@@ -47,5 +48,46 @@ export function buildAccessibleTable(
   }
   table.appendChild(tbody);
 
+  return table;
+}
+
+export function buildDiffAccessibleTable(
+  diffs: DiffResult[],
+  context: HeatmapContext,
+  id: string
+): HTMLTableElement {
+  const table = document.createElement('table');
+  table.id = id;
+  table.style.cssText = VISUALLY_HIDDEN_STYLE;
+
+  const caption = document.createElement('caption');
+  caption.textContent = context.description ?? 'Comparison between two datasets';
+  table.appendChild(caption);
+
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  [context.rowLabel ?? 'Row', context.colLabel ?? 'Column', 'Previous', 'Current', 'Change'].forEach(
+    (label) => {
+      const th = document.createElement('th');
+      th.textContent = label;
+      th.scope = 'col';
+      headRow.appendChild(th);
+    }
+  );
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  for (const d of diffs) {
+    const tr = document.createElement('tr');
+    const sign = d.delta >= 0 ? '+' : '';
+    [d.row, d.col, d.previousValue, d.currentValue, `${sign}${d.delta}`].forEach((v) => {
+      const td = document.createElement('td');
+      td.textContent = String(v);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
   return table;
 }
