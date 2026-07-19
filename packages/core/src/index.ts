@@ -8,6 +8,9 @@ import { setupRovingTabindex, GridCellRef } from './keyboard';
 import { TooltipController, attachTooltipEvents, attachDiffTooltipEvents } from './tooltip';
 import { computeDiff, normalizeDiffs, DiffResult } from './diff';
 import { buildLoadingState, buildEmptyState, buildErrorState } from './states';
+import { computeAggregationFactor, aggregateData } from './aggregate';
+
+type Mode = 'normal' | 'diff' | null;
 
 export class Heatmap {
   private static instanceCount = 0;
@@ -17,8 +20,14 @@ export class Heatmap {
   private table: HTMLTableElement | null = null;
   private tooltip: TooltipController;
   private stateEl: HTMLElement | null = null;
+  private resizeObserver: ResizeObserver;
+  private resizeScheduled = false;
+
+  private rawData: HeatmapCell[] = [];
   private data: HeatmapCell[] = [];
   private diffs: DiffResult[] | null = null;
+  private mode: Mode = null;
+
   private context: HeatmapContext = {};
   private palette: Palette;
   private options: HeatmapOptions;
@@ -42,6 +51,17 @@ export class Heatmap {
     this.el.appendChild(this.svg);
 
     this.showState(buildLoadingState());
+
+    this.resizeObserver = new ResizeObserver(() => {
+      if (this.resizeScheduled) return;
+      this.resizeScheduled = true;
+      requestAnimationFrame(() => {
+        this.resizeScheduled = false;
+        if (this.mode === 'normal') this.applyAggregationAndRender();
+        else if (this.mode === 'diff') this.renderDiff();
+      });
+    });
+    this.resizeObserver.observe(this.el);
   }
 
   load(data: unknown, context: HeatmapContext = {}): void {
@@ -49,18 +69,21 @@ export class Heatmap {
     try {
       validated = validateData(data);
     } catch (err) {
+      this.mode = null;
       this.handleError(err as Error);
       return;
     }
     this.context = context;
     if (validated.length === 0) {
-      this.data = [];
+      this.mode = null;
+      this.rawData = [];
       this.showState(buildEmptyState());
       return;
     }
-    this.data = validated;
+    this.mode = 'normal';
+    this.rawData = validated;
     this.showState(null);
-    this.render();
+    this.applyAggregationAndRender();
   }
 
   loadDiff(current: unknown, previous: unknown, context: HeatmapContext = {}): void {
@@ -70,11 +93,13 @@ export class Heatmap {
       validCurrent = validateData(current);
       validPrevious = validateData(previous);
     } catch (err) {
+      this.mode = null;
       this.handleError(err as Error);
       return;
     }
     this.context = context;
     if (validCurrent.length === 0 && validPrevious.length === 0) {
+      this.mode = null;
       this.diffs = null;
       this.showState(buildEmptyState());
       return;
@@ -83,12 +108,24 @@ export class Heatmap {
     try {
       diffs = computeDiff(validCurrent, validPrevious);
     } catch (err) {
+      this.mode = null;
       this.handleError(err as Error);
       return;
     }
+    this.mode = 'diff';
     this.diffs = diffs;
     this.showState(null);
     this.renderDiff();
+  }
+
+  private applyAggregationAndRender(): void {
+    const width = this.el.clientWidth || 400;
+    const height = this.el.clientHeight || 300;
+    const rows = Array.from(new Set(this.rawData.map((d) => d.row)));
+    const cols = Array.from(new Set(this.rawData.map((d) => d.col)));
+    const factor = computeAggregationFactor(width, height, rows.length, cols.length);
+    this.data = aggregateData(this.rawData, rows, cols, factor);
+    this.render();
   }
 
   private handleError(error: Error): void {
@@ -206,6 +243,7 @@ export class Heatmap {
   }
 
   destroy(): void {
+    this.resizeObserver.disconnect();
     this.cleanupKeyboard?.();
     this.cleanupTooltip?.();
     this.tooltip.destroy();

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach} from 'vitest';
-import { Heatmap } from '../../src/index';
+import { Heatmap } from '../src/index';
 
 describe('Heatmap', () => {
   afterEach(() => {
