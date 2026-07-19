@@ -17,26 +17,30 @@ interface HeatmapContext {
 interface HeatmapOptions {
     palette?: Palette;
     tooltipFormatter?: TooltipFormatter;
+    onError?: (error: Error) => boolean | void;
 }
 
 declare class Heatmap {
     private el;
     private static instanceCount;
     private readonly id;
-    private options;
     private svg;
     private table;
     private tooltip;
+    private stateEl;
     private data;
+    private diffs;
     private context;
     private palette;
+    private options;
     private cleanupKeyboard;
     private cleanupTooltip;
-    private diffs;
     constructor(el: HTMLElement, options?: HeatmapOptions);
     load(data: unknown, context?: HeatmapContext): void;
-    private render;
     loadDiff(current: unknown, previous: unknown, context?: HeatmapContext): void;
+    private handleError;
+    private showState;
+    private render;
     private renderDiff;
     destroy(): void;
 }

@@ -369,17 +369,64 @@ function attachDiffTooltipEvents(cells, tooltip, context) {
   return () => cleanupFns.forEach((fn) => fn());
 }
 
+// src/states.ts
+function buildLoadingState() {
+  const el = document.createElement("div");
+  el.setAttribute("data-hueglint-state", "loading");
+  el.style.cssText = "display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:100%;height:100%;min-height:120px;";
+  for (let i = 0; i < 16; i++) {
+    const cell = document.createElement("div");
+    cell.style.cssText = `background:#e0e0e0;border-radius:3px;animation:hueglint-pulse 1.4s ease-in-out infinite;animation-delay:${i % 4 * 0.1}s;`;
+    el.appendChild(cell);
+  }
+  if (!document.getElementById("hueglint-pulse-keyframes")) {
+    const style = document.createElement("style");
+    style.id = "hueglint-pulse-keyframes";
+    style.textContent = "@keyframes hueglint-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }";
+    document.head.appendChild(style);
+  }
+  return el;
+}
+function buildEmptyState() {
+  const el = document.createElement("div");
+  el.setAttribute("data-hueglint-state", "empty");
+  el.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-height:120px;text-align:center;color:#888;font-size:13px;";
+  const title = document.createElement("p");
+  title.textContent = "No data to display";
+  title.style.cssText = "margin:0;";
+  const subtitle = document.createElement("p");
+  subtitle.textContent = "Call .load() with your dataset";
+  subtitle.style.cssText = "margin:0;font-size:12px;color:#aaa;";
+  el.append(title, subtitle);
+  return el;
+}
+function buildErrorState(message) {
+  const el = document.createElement("div");
+  el.setAttribute("data-hueglint-state", "error");
+  el.setAttribute("role", "alert");
+  el.style.cssText = "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-height:120px;text-align:center;border:1px solid #e33;border-radius:6px;color:#333;font-size:13px;";
+  const title = document.createElement("p");
+  title.textContent = message;
+  title.style.cssText = "margin:0;";
+  const subtitle = document.createElement("p");
+  subtitle.textContent = "See console for details";
+  subtitle.style.cssText = "margin:0;font-size:12px;color:#888;";
+  el.append(title, subtitle);
+  return el;
+}
+
 // src/index.ts
 var _Heatmap = class _Heatmap {
   constructor(el, options = {}) {
     this.el = el;
     this.id = `hueglint-${_Heatmap.instanceCount++}`;
     this.table = null;
+    this.stateEl = null;
     this.data = [];
+    this.diffs = null;
     this.context = {};
     this.cleanupKeyboard = null;
     this.cleanupTooltip = null;
-    this.diffs = null;
     this.options = options;
     const palette = options.palette ?? "viridis";
     if (!isValidPalette(palette)) {
@@ -393,11 +440,71 @@ var _Heatmap = class _Heatmap {
     this.svg.setAttribute("width", "100%");
     this.svg.setAttribute("height", "100%");
     this.el.appendChild(this.svg);
+    this.showState(buildLoadingState());
   }
   load(data, context = {}) {
-    this.data = validateData(data);
+    let validated;
+    try {
+      validated = validateData(data);
+    } catch (err) {
+      this.handleError(err);
+      return;
+    }
     this.context = context;
+    if (validated.length === 0) {
+      this.data = [];
+      this.showState(buildEmptyState());
+      return;
+    }
+    this.data = validated;
+    this.showState(null);
     this.render();
+  }
+  loadDiff(current, previous, context = {}) {
+    let validCurrent;
+    let validPrevious;
+    try {
+      validCurrent = validateData(current);
+      validPrevious = validateData(previous);
+    } catch (err) {
+      this.handleError(err);
+      return;
+    }
+    this.context = context;
+    if (validCurrent.length === 0 && validPrevious.length === 0) {
+      this.diffs = null;
+      this.showState(buildEmptyState());
+      return;
+    }
+    let diffs;
+    try {
+      diffs = computeDiff(validCurrent, validPrevious);
+    } catch (err) {
+      this.handleError(err);
+      return;
+    }
+    this.diffs = diffs;
+    this.showState(null);
+    this.renderDiff();
+  }
+  handleError(error) {
+    console.error("[hueglint]", error);
+    const suppressed = this.options.onError?.(error) === false;
+    if (!suppressed) {
+      this.showState(buildErrorState("Unable to load chart data"));
+    }
+  }
+  showState(el) {
+    if (this.stateEl) this.stateEl.remove();
+    this.stateEl = el;
+    if (el) {
+      this.svg.style.display = "none";
+      if (this.table) this.table.style.display = "none";
+      this.el.appendChild(el);
+    } else {
+      this.svg.style.display = "";
+      if (this.table) this.table.style.display = "";
+    }
   }
   render() {
     this.cleanupKeyboard?.();
@@ -432,17 +539,15 @@ var _Heatmap = class _Heatmap {
       tooltipCells.push({ el: rect, cell });
     }
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
-    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context, this.options.tooltipFormatter);
+    this.cleanupTooltip = attachTooltipEvents(
+      tooltipCells,
+      this.tooltip,
+      this.context,
+      this.options.tooltipFormatter
+    );
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
     this.el.appendChild(this.table);
-  }
-  loadDiff(current, previous, context = {}) {
-    const validCurrent = validateData(current);
-    const validPrevious = validateData(previous);
-    this.diffs = computeDiff(validCurrent, validPrevious);
-    this.context = context;
-    this.renderDiff();
   }
   renderDiff() {
     if (!this.diffs) return;
@@ -471,7 +576,11 @@ var _Heatmap = class _Heatmap {
         `${this.context.rowLabel ?? "Row"} ${d.row}, ${this.context.colLabel ?? "Column"} ${d.col}: changed from ${d.previousValue} to ${d.currentValue} (${sign}${d.delta})`
       );
       this.svg.appendChild(rect);
-      gridCells.push({ el: rect, rowIndex: layout.rows.indexOf(d.row), colIndex: layout.cols.indexOf(d.col) });
+      gridCells.push({
+        el: rect,
+        rowIndex: layout.rows.indexOf(d.row),
+        colIndex: layout.cols.indexOf(d.col)
+      });
       tooltipCells.push({ el: rect, diff: d });
     }
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
@@ -484,6 +593,7 @@ var _Heatmap = class _Heatmap {
     this.cleanupKeyboard?.();
     this.cleanupTooltip?.();
     this.tooltip.destroy();
+    this.stateEl?.remove();
     this.svg.remove();
     this.table?.remove();
   }
