@@ -1,29 +1,29 @@
 import { HeatmapCell, HeatmapContext, HeatmapOptions } from './types';
 import { validateData } from './validate';
 import { computeLayout } from './layout';
-import { isValidPalette, getColorScale, Palette } from './palette';
+import { isValidPalette, getColorScale, getDivergingColorScale, Palette } from './palette';
 import { normalizeValues } from './normalize';
-import { buildAccessibleTable } from './a11y';
+import { buildAccessibleTable, buildDiffAccessibleTable } from './a11y';
 import { setupRovingTabindex, GridCellRef } from './keyboard';
 import { TooltipController, attachTooltipEvents, attachDiffTooltipEvents } from './tooltip';
 import { computeDiff, normalizeDiffs, DiffResult } from './diff';
-import { getDivergingColorScale } from './palette';
-import { buildDiffAccessibleTable } from './a11y';
+import { buildLoadingState, buildEmptyState, buildErrorState } from './states';
 
 export class Heatmap {
   private static instanceCount = 0;
   private readonly id = `hueglint-${Heatmap.instanceCount++}`;
-  
-  private options: HeatmapOptions;
+
   private svg: SVGSVGElement;
   private table: HTMLTableElement | null = null;
   private tooltip: TooltipController;
+  private stateEl: HTMLElement | null = null;
   private data: HeatmapCell[] = [];
+  private diffs: DiffResult[] | null = null;
   private context: HeatmapContext = {};
   private palette: Palette;
+  private options: HeatmapOptions;
   private cleanupKeyboard: (() => void) | null = null;
   private cleanupTooltip: (() => void) | null = null;
-  private diffs: DiffResult[] | null = null;
 
   constructor(private el: HTMLElement, options: HeatmapOptions = {}) {
     this.options = options;
@@ -40,12 +40,76 @@ export class Heatmap {
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
     this.el.appendChild(this.svg);
+
+    this.showState(buildLoadingState());
   }
 
   load(data: unknown, context: HeatmapContext = {}): void {
-    this.data = validateData(data);
+    let validated: HeatmapCell[];
+    try {
+      validated = validateData(data);
+    } catch (err) {
+      this.handleError(err as Error);
+      return;
+    }
     this.context = context;
+    if (validated.length === 0) {
+      this.data = [];
+      this.showState(buildEmptyState());
+      return;
+    }
+    this.data = validated;
+    this.showState(null);
     this.render();
+  }
+
+  loadDiff(current: unknown, previous: unknown, context: HeatmapContext = {}): void {
+    let validCurrent: HeatmapCell[];
+    let validPrevious: HeatmapCell[];
+    try {
+      validCurrent = validateData(current);
+      validPrevious = validateData(previous);
+    } catch (err) {
+      this.handleError(err as Error);
+      return;
+    }
+    this.context = context;
+    if (validCurrent.length === 0 && validPrevious.length === 0) {
+      this.diffs = null;
+      this.showState(buildEmptyState());
+      return;
+    }
+    let diffs: DiffResult[];
+    try {
+      diffs = computeDiff(validCurrent, validPrevious);
+    } catch (err) {
+      this.handleError(err as Error);
+      return;
+    }
+    this.diffs = diffs;
+    this.showState(null);
+    this.renderDiff();
+  }
+
+  private handleError(error: Error): void {
+    console.error('[hueglint]', error);
+    const suppressed = this.options.onError?.(error) === false;
+    if (!suppressed) {
+      this.showState(buildErrorState('Unable to load chart data'));
+    }
+  }
+
+  private showState(el: HTMLElement | null): void {
+    if (this.stateEl) this.stateEl.remove();
+    this.stateEl = el;
+    if (el) {
+      this.svg.style.display = 'none';
+      if (this.table) this.table.style.display = 'none';
+      this.el.appendChild(el);
+    } else {
+      this.svg.style.display = '';
+      if (this.table) this.table.style.display = '';
+    }
   }
 
   private render(): void {
@@ -84,19 +148,16 @@ export class Heatmap {
     }
 
     this.cleanupKeyboard = setupRovingTabindex(gridCells);
-    this.cleanupTooltip = attachTooltipEvents(tooltipCells, this.tooltip, this.context, this.options.tooltipFormatter);
+    this.cleanupTooltip = attachTooltipEvents(
+      tooltipCells,
+      this.tooltip,
+      this.context,
+      this.options.tooltipFormatter
+    );
 
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
     this.el.appendChild(this.table);
-  }
-
-  loadDiff(current: unknown, previous: unknown, context: HeatmapContext = {}): void {
-    const validCurrent = validateData(current);
-    const validPrevious = validateData(previous);
-    this.diffs = computeDiff(validCurrent, validPrevious);
-    this.context = context;
-    this.renderDiff();
   }
 
   private renderDiff(): void {
@@ -128,7 +189,11 @@ export class Heatmap {
           `changed from ${d.previousValue} to ${d.currentValue} (${sign}${d.delta})`
       );
       this.svg.appendChild(rect);
-      gridCells.push({ el: rect, rowIndex: layout.rows.indexOf(d.row), colIndex: layout.cols.indexOf(d.col) });
+      gridCells.push({
+        el: rect,
+        rowIndex: layout.rows.indexOf(d.row),
+        colIndex: layout.cols.indexOf(d.col),
+      });
       tooltipCells.push({ el: rect, diff: d });
     }
 
@@ -144,6 +209,7 @@ export class Heatmap {
     this.cleanupKeyboard?.();
     this.cleanupTooltip?.();
     this.tooltip.destroy();
+    this.stateEl?.remove();
     this.svg.remove();
     this.table?.remove();
   }
