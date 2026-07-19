@@ -590,6 +590,25 @@ var _Heatmap = class _Heatmap {
     this.showState(null);
     this.renderDiff();
   }
+  update(row, col, value) {
+    if (this.mode !== "normal") {
+      console.warn("[hueglint] update() is only supported outside diff mode.");
+      return;
+    }
+    if (typeof value !== "number") {
+      this.handleError(
+        new Error(`[hueglint] update(): expected value to be a number, got ${typeof value}.`)
+      );
+      return;
+    }
+    const existing = this.rawData.find((c) => c.row === row && c.col === col);
+    if (existing) {
+      existing.value = value;
+    } else {
+      this.rawData.push({ row, col, value });
+    }
+    this.applyAggregationAndRender();
+  }
   applyAggregationAndRender() {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;

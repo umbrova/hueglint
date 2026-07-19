@@ -10,6 +10,10 @@ import { computeDiff, normalizeDiffs, DiffResult } from './diff';
 import { buildLoadingState, buildEmptyState, buildErrorState } from './states';
 import { computeAggregationFactor, aggregateData } from './aggregate';
 
+export type { HeatmapCell, HeatmapContext, HeatmapOptions } from './types';
+export type { Palette } from './palette';
+export type { DiffResult } from './diff';
+
 type Mode = 'normal' | 'diff' | null;
 
 export class Heatmap {
@@ -116,6 +120,26 @@ export class Heatmap {
     this.diffs = diffs;
     this.showState(null);
     this.renderDiff();
+  }
+
+  update(row: string | number, col: string | number, value: number): void {
+    if (this.mode !== 'normal') {
+      console.warn('[hueglint] update() is only supported outside diff mode.');
+      return;
+    }
+    if (typeof value !== 'number') {
+      this.handleError(
+        new Error(`[hueglint] update(): expected value to be a number, got ${typeof value}.`)
+      );
+      return;
+    }
+    const existing = this.rawData.find((c) => c.row === row && c.col === col);
+    if (existing) {
+      existing.value = value;
+    } else {
+      this.rawData.push({ row, col, value });
+    }
+    this.applyAggregationAndRender();
   }
 
   private applyAggregationAndRender(): void {

@@ -5,16 +5,19 @@
 
 [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/Development/projects/hueglint/packages/core[39m
 
- [32m✓[39m test/responsive.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 336[2mms[22m[39m
- [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 369[2mms[22m[39m
- [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 405[2mms[22m[39m
- [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 424[2mms[22m[39m
- [32m✓[39m test/render.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 432[2mms[22m[39m
- [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 433[2mms[22m[39m
- [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 493[2mms[22m[39m
+ [32m✓[39m test/responsive.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 264[2mms[22m[39m
+ [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 374[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mmakes exactly one cell tabbable at a time (roving tabindex) [33m301[2mms[22m[39m
+ [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 457[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders diff cells only for matching (row, col) pairs, warning on mismatches [33m328[2mms[22m[39m
+ [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 449[2mms[22m[39m
+ [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 476[2mms[22m[39m
+ [32m✓[39m test/render.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 486[2mms[22m[39m
+ [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 529[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mshows tooltip content on hover and hides on mouseleave [33m313[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
 [2m      Tests [22m [1m[32m41 passed[39m[22m[90m (41)[39m
-[2m   Start at [22m 09:33:05
-[2m   Duration [22m 6.76s[2m (transform 538ms, setup 638ms, collect 2.93s, tests 2.89s, environment 34.10s, prepare 2.28s)[22m
+[2m   Start at [22m 09:51:33
+[2m   Duration [22m 9.91s[2m (transform 1.41s, setup 1.30s, collect 14.67s, tests 3.03s, environment 38.79s, prepare 5.28s)[22m
 

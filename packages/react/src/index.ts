@@ -1,2 +1,2 @@
-// Bindings arrive once core is built out — Phase 9.
-export {};
+export { Heatmap } from './Heatmap';
+export type { HeatmapProps, HeatmapHandle } from './Heatmap';
