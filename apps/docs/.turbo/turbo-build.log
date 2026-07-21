@@ -2,38 +2,37 @@
 > docs@ build D:\Development\projects\hueglint\apps\docs
 > astro build
 
-23:35:44 [vite] Re-optimizing dependencies because vite config has changed
-23:35:45 [types] Generated 870ms
-23:35:45 [build] output: "static"
-23:35:45 [build] directory: D:\Development\projects\hueglint\apps\docs\dist\
-23:35:45 [build] Collecting build info...
-23:35:45 [build] ✓ Completed in 1.19s.
-23:35:45 [build] Building static entrypoints...
-23:36:30 [vite] [32m✓ built in 41.49s[39m
-23:36:36 [build] ✓ Completed in 51.04s.
+23:50:20 [types] Generated 1.07s
+23:50:20 [build] output: "static"
+23:50:20 [build] directory: D:\Development\projects\hueglint\apps\docs\dist\
+23:50:20 [build] Collecting build info...
+23:50:20 [build] ✓ Completed in 1.48s.
+23:50:20 [build] Building static entrypoints...
+23:50:47 [vite] [32m✓ built in 26.57s[39m
+23:50:47 [build] ✓ Completed in 26.80s.
 
  building client (vite) 
-23:36:51 [vite] transforming...
-23:37:02 [vite] [32m✓[39m 17 modules transformed.
-23:37:02 [vite] rendering chunks...
-23:37:03 [vite] computing gzip size...
-23:37:09 [vite] [2mdist/[22m[32m_astro/ec.8zarh.js          [39m[1m[2m 2.42 kB[22m[1m[22m
-23:37:09 [vite] [2mdist/[22m[35m_astro/ec.j8ofn.css         [39m[1m[2m18.25 kB[22m[1m[22m[2m │ gzip:  3.86 kB[22m
-23:37:09 [vite] [2mdist/[22m[36m_astro/page.7qqag-5g.js     [39m[1m[2m 2.17 kB[22m[1m[22m[2m │ gzip:  0.97 kB[22m
-23:37:09 [vite] [2mdist/[22m[36m_astro/hoisted.DG7tsZN-.js  [39m[1m[2m 8.72 kB[22m[1m[22m[2m │ gzip:  3.42 kB[22m
-23:37:09 [vite] [2mdist/[22m[36m_astro/ui-core.Brt9rHzg.js  [39m[1m[2m85.94 kB[22m[1m[22m[2m │ gzip: 27.32 kB[22m
-23:37:09 [vite] [32m✓ built in 18.63s[39m
+23:50:47 [vite] transforming...
+23:50:48 [vite] [32m✓[39m 17 modules transformed.
+23:50:48 [vite] rendering chunks...
+23:50:49 [vite] computing gzip size...
+23:50:50 [vite] [2mdist/[22m[32m_astro/ec.8zarh.js          [39m[1m[2m 2.42 kB[22m[1m[22m
+23:50:50 [vite] [2mdist/[22m[35m_astro/ec.j8ofn.css         [39m[1m[2m18.25 kB[22m[1m[22m[2m │ gzip:  3.86 kB[22m
+23:50:50 [vite] [2mdist/[22m[36m_astro/page.7qqag-5g.js     [39m[1m[2m 2.17 kB[22m[1m[22m[2m │ gzip:  0.97 kB[22m
+23:50:50 [vite] [2mdist/[22m[36m_astro/hoisted.Ce52GlQy.js  [39m[1m[2m 8.72 kB[22m[1m[22m[2m │ gzip:  3.41 kB[22m
+23:50:50 [vite] [2mdist/[22m[36m_astro/ui-core.CZzGcJ11.js  [39m[1m[2m85.94 kB[22m[1m[22m[2m │ gzip: 27.32 kB[22m
+23:50:50 [vite] [32m✓ built in 2.69s[39m
 
  generating static routes 
-23:37:13 ▶ /404
-23:37:13   └─ /404.html (+21.82s)
-23:37:35 ▶ /[...slug]
-23:37:35   ├─ /core-concepts/data-format/index.html (+65ms)
-23:37:35   ├─ /getting-started/installation/index.html (+38ms)
-23:37:35   └─ /index.html (+49ms)
-23:37:35 ✓ Completed in 24.87s.
+23:50:50 ▶ /404
+23:50:50   └─ /404.html (+99ms)
+23:50:50 ▶ /[...slug]
+23:50:50   ├─ /core-concepts/data-format/index.html (+41ms)
+23:50:50   ├─ /getting-started/installation/index.html (+37ms)
+23:50:50   └─ /index.html (+20ms)
+23:50:50 ✓ Completed in 371ms.
 
-23:37:39 [build] Waiting for integration "@astrojs/starlight", hook "astro:build:done"...
+23:50:54 [build] Waiting for integration "@astrojs/starlight", hook "astro:build:done"...
 
 Running Pagefind v1.5.2 (Extended)
 Running from: "D:\\Development\\projects\\hueglint\\node_modules\\.pnpm\\@astrojs+starlight@0.28.6_astro@4.16.19_@types+node@24.13.3_rollup@4.62.2_typescript@5.9.3_\\node_modules\\@astrojs\\starlight"
@@ -58,12 +57,7 @@ Total:
   Indexed 0 filters
   Indexed 0 sorts
 
-Finished in 0.202 seconds
-npm notice
-npm notice New major version of npm available! 10.9.8 -> 12.0.1
-npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.0.1
-npm notice To update run: npm install -g npm@12.0.1
-npm notice
-23:37:57 [WARN] [@astrojs/sitemap] The Sitemap integration requires the `site` astro.config option. Skipping.
-23:37:57 [build] 4 page(s) built in 133.39s
-23:37:57 [build] Complete!
+Finished in 0.147 seconds
+23:50:56 [WARN] [@astrojs/sitemap] The Sitemap integration requires the `site` astro.config option. Skipping.
+23:50:56 [build] 4 page(s) built in 37.86s
+23:50:56 [build] Complete!
