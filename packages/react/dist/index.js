@@ -2,7 +2,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { Heatmap as CoreHeatmap } from "@hueglint/core";
 import { jsx } from "react/jsx-runtime";
-var Heatmap = forwardRef(function Heatmap2({ data, context, options }, ref) {
+var Heatmap = forwardRef(function Heatmap2({ data, previousData, context, options }, ref) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
   useEffect(() => {
@@ -14,8 +14,17 @@ var Heatmap = forwardRef(function Heatmap2({ data, context, options }, ref) {
     };
   }, []);
   useEffect(() => {
-    chartRef.current?.load(data, context);
-  }, [data, context]);
+    if (previousData !== void 0) {
+      chartRef.current?.loadDiff(data, previousData, context);
+    } else {
+      chartRef.current?.load(data, context);
+    }
+  }, [data, previousData, context]);
+  useEffect(() => {
+    if (options?.palette) {
+      chartRef.current?.setPalette(options.palette);
+    }
+  }, [options?.palette]);
   useImperativeHandle(
     ref,
     () => ({

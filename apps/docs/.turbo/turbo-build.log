@@ -2,42 +2,40 @@
 > docs@ build D:\Development\projects\hueglint\apps\docs
 > astro build
 
-00:20:16 [vite] Re-optimizing dependencies because vite config has changed
-00:20:16 [types] Generated 741ms
-00:20:16 [build] output: "static"
-00:20:16 [build] directory: D:\Development\projects\hueglint\apps\docs\dist\
-00:20:16 [build] Collecting build info...
-00:20:16 [build] ✓ Completed in 968ms.
-00:20:16 [build] Building static entrypoints...
-00:20:26 [vite] [32m✓ built in 9.16s[39m
-00:20:26 [build] ✓ Completed in 9.22s.
+00:38:20 [types] Generated 444ms
+00:38:20 [build] output: "static"
+00:38:20 [build] directory: D:\Development\projects\hueglint\apps\docs\dist\
+00:38:20 [build] Collecting build info...
+00:38:20 [build] ✓ Completed in 657ms.
+00:38:20 [build] Building static entrypoints...
+00:38:31 [vite] [32m✓ built in 11.02s[39m
+00:38:31 [build] ✓ Completed in 11.07s.
 
  building client (vite) 
-00:20:26 [vite] transforming...
-00:20:27 [vite] [32m✓[39m 128 modules transformed.
-00:20:27 [vite] rendering chunks...
-00:20:27 [vite] computing gzip size...
-00:20:28 [vite] [2mdist/[22m[32m_astro/ec.8zarh.js             [39m[1m[2m  2.42 kB[22m[1m[22m
-00:20:28 [vite] [2mdist/[22m[35m_astro/ec.j8ofn.css            [39m[1m[2m 18.25 kB[22m[1m[22m[2m │ gzip:  3.86 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/page.7qqag-5g.js        [39m[1m[2m  2.17 kB[22m[1m[22m[2m │ gzip:  0.97 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/index.CVf8TyFT.js       [39m[1m[2m  6.72 kB[22m[1m[22m[2m │ gzip:  2.68 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/hoisted.CU23Mzqw.js     [39m[1m[2m  8.72 kB[22m[1m[22m[2m │ gzip:  3.42 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/Playground.NxNbl3BY.js  [39m[1m[2m 33.16 kB[22m[1m[22m[2m │ gzip: 13.36 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/ui-core.DayrF8rB.js     [39m[1m[2m 85.94 kB[22m[1m[22m[2m │ gzip: 27.32 kB[22m
-00:20:28 [vite] [2mdist/[22m[36m_astro/client.DrE9CFQR.js      [39m[1m[2m135.60 kB[22m[1m[22m[2m │ gzip: 43.80 kB[22m
-00:20:28 [vite] [32m✓ built in 2.01s[39m
+00:38:31 [vite] transforming...
+00:38:32 [vite] [32m✓[39m 128 modules transformed.
+00:38:32 [vite] rendering chunks...
+00:38:32 [vite] computing gzip size...
+00:38:32 [vite] [2mdist/[22m[32m_astro/ec.8zarh.js             [39m[1m[2m  2.42 kB[22m[1m[22m
+00:38:32 [vite] [2mdist/[22m[35m_astro/ec.j8ofn.css            [39m[1m[2m 18.25 kB[22m[1m[22m[2m │ gzip:  3.86 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/page.7qqag-5g.js        [39m[1m[2m  2.17 kB[22m[1m[22m[2m │ gzip:  0.97 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/index.CVf8TyFT.js       [39m[1m[2m  6.72 kB[22m[1m[22m[2m │ gzip:  2.68 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/hoisted.CYNHYlBZ.js     [39m[1m[2m  8.72 kB[22m[1m[22m[2m │ gzip:  3.41 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/Playground.C3fgNUpT.js  [39m[1m[2m 34.26 kB[22m[1m[22m[2m │ gzip: 13.64 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/ui-core.CIPEWxBJ.js     [39m[1m[2m 85.94 kB[22m[1m[22m[2m │ gzip: 27.32 kB[22m
+00:38:32 [vite] [2mdist/[22m[36m_astro/client.DrE9CFQR.js      [39m[1m[2m135.60 kB[22m[1m[22m[2m │ gzip: 43.80 kB[22m
+00:38:32 [vite] [32m✓ built in 1.43s[39m
 
  generating static routes 
-00:20:29 ▶ /404
-00:20:29   └─ /404.html (+142ms)
-00:20:29 ▶ /[...slug]
-00:20:29   ├─ /docs/core-concepts/data-format/index.html (+17ms)
-00:20:29   └─ /docs/getting-started/installation/index.html (+9ms)
-00:20:30 ▶ src/pages/index.astro
-00:20:30   └─ /index.html (+11ms)
-00:20:30 ✓ Completed in 1.80s.
+00:38:32 ▶ /404
+00:38:32   └─ /404.html (+33ms)
+00:38:32 ▶ /[...slug]
+00:38:32   ├─ /docs/core-concepts/data-format/index.html (+16ms)
+00:38:32   └─ /docs/getting-started/installation/index.html (+14ms)
+00:38:32 ▶ src/pages/index.astro
+00:38:32   └─ /index.html (+15ms)
+00:38:32 ✓ Completed in 208ms.
 
-00:20:33 [build] Waiting for integration "@astrojs/starlight", hook "astro:build:done"...
 
 Running Pagefind v1.5.2 (Extended)
 Running from: "D:\\Development\\projects\\hueglint\\node_modules\\.pnpm\\@astrojs+starlight@0.28.6_astro@4.16.19_@types+node@24.13.3_rollup@4.62.2_typescript@5.9.3_\\node_modules\\@astrojs\\starlight"
@@ -62,7 +60,7 @@ Total:
   Indexed 0 filters
   Indexed 0 sorts
 
-Finished in 0.160 seconds
-00:20:40 [WARN] [@astrojs/sitemap] The Sitemap integration requires the `site` astro.config option. Skipping.
-00:20:40 [build] 4 page(s) built in 24.10s
-00:20:40 [build] Complete!
+Finished in 0.122 seconds
+00:38:34 [WARN] [@astrojs/sitemap] The Sitemap integration requires the `site` astro.config option. Skipping.
+00:38:34 [build] 4 page(s) built in 15.52s
+00:38:34 [build] Complete!

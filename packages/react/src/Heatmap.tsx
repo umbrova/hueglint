@@ -8,22 +8,18 @@ export interface HeatmapHandle {
 
 export interface HeatmapProps {
   data: unknown;
+  previousData?: unknown;
   context?: HeatmapContext;
   options?: HeatmapOptions;
 }
 
 export const Heatmap = forwardRef<HeatmapHandle, HeatmapProps>(function Heatmap(
-  { data, context, options },
+  { data, previousData, context, options },
   ref
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<CoreHeatmap | null>(null);
 
-  // Instance created once per mount. `options` is captured at construction
-  // time only — changing it after mount does not reconfigure the chart in
-  // v1. That's a deliberate scope limit, not an oversight: reconfiguring
-  // palette/tooltipFormatter live would mean destroy-and-recreate logic
-  // that deserves its own design pass, not a guess bundled into this phase.
   useEffect(() => {
     if (!containerRef.current) return;
     chartRef.current = new CoreHeatmap(containerRef.current, options);
@@ -35,8 +31,21 @@ export const Heatmap = forwardRef<HeatmapHandle, HeatmapProps>(function Heatmap(
   }, []);
 
   useEffect(() => {
-    chartRef.current?.load(data, context);
-  }, [data, context]);
+    if (previousData !== undefined) {
+      chartRef.current?.loadDiff(data, previousData, context);
+    } else {
+      chartRef.current?.load(data, context);
+    }
+  }, [data, previousData, context]);
+
+  // Palette can change after mount without recreating the whole chart —
+  // recreating on every options change would destroy tooltip/DOM state
+  // for no reason, so this only touches the one thing that actually changed.
+  useEffect(() => {
+    if (options?.palette) {
+      chartRef.current?.setPalette(options.palette);
+    }
+  }, [options?.palette]);
 
   useImperativeHandle(
     ref,
