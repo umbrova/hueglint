@@ -6,6 +6,7 @@ interface HeatmapHandle {
 }
 interface HeatmapProps {
     data: unknown;
+    previousData?: unknown;
     context?: HeatmapContext;
     options?: HeatmapOptions;
 }

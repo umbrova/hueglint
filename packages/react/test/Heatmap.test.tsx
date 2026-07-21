@@ -46,4 +46,30 @@ describe('Heatmap (React)', () => {
     ref.current?.update('Mon', '8am', 99);
     expect(container.querySelector('rect')?.getAttribute('aria-label')).toContain('99');
   });
+
+  it('updates colors when the palette option changes, without remounting the container', () => {
+    const sample = [
+      { row: 'Mon', col: '8am', value: 1 },
+      { row: 'Mon', col: '9am', value: 100 },
+    ];
+    const { container, rerender } = render(<Heatmap data={sample} options={{ palette: 'viridis' }} />);
+    const fillBefore = container.querySelector('rect')?.getAttribute('fill');
+    const svgBefore = container.querySelector('svg');
+
+    rerender(<Heatmap data={sample} options={{ palette: 'plasma' }} />);
+
+    expect(container.querySelector('svg')).toBe(svgBefore);
+    expect(container.querySelector('rect')?.getAttribute('fill')).not.toBe(fillBefore);
+  });
+
+  it('renders diff mode when previousData is provided', () => {
+    const { container } = render(
+      <Heatmap
+        data={[{ row: 'Mon', col: '8am', value: 100 }]}
+        previousData={[{ row: 'Mon', col: '8am', value: 50 }]}
+      />
+    );
+    const headers = Array.from(container.querySelectorAll('th')).map((th) => th.textContent);
+    expect(headers).toEqual(expect.arrayContaining(['Previous', 'Current', 'Change']));
+  });
 });

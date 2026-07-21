@@ -142,6 +142,23 @@ export class Heatmap {
     this.applyAggregationAndRender();
   }
 
+  setPalette(palette: Palette): void {
+    if (!isValidPalette(palette)) {
+      console.warn(`[hueglint] setPalette(): invalid palette "${palette}", ignoring.`);
+      return;
+    }
+    this.palette = palette;
+    if (this.mode === 'normal') {
+      this.applyAggregationAndRender();
+    } else if (this.mode === 'diff') {
+      console.warn(
+        '[hueglint] setPalette() has no effect in diff mode — diff mode always uses the diverging palette.'
+      );
+    }
+    // mode === null (nothing loaded yet): value is stored silently and
+    // takes effect on the next load().
+  }
+
   private applyAggregationAndRender(): void {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;

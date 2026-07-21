@@ -11,9 +11,10 @@
   "dependencies": {
     "astro": "^4.0.0",
     "@astrojs/starlight": "^0.28.0",
+    "@astrojs/react": "^3.6.0",
+    "@hueglint/core": "workspace:*",
     "@hueglint/react": "workspace:*",
     "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "@astrojs/react": "^3.6.0"
+    "react-dom": "^18.3.0"
   }
 }

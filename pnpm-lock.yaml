@@ -29,6 +29,9 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.28.0
         version: 0.28.6(astro@4.16.19(@types/node@24.13.3)(rollup@4.62.2)(typescript@5.9.3))
+      '@hueglint/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@hueglint/react':
         specifier: workspace:*
         version: link:../../packages/react

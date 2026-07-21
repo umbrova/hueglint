@@ -28,7 +28,7 @@ module.exports = __toCommonJS(index_exports);
 var import_react = require("react");
 var import_core = require("@hueglint/core");
 var import_jsx_runtime = require("react/jsx-runtime");
-var Heatmap = (0, import_react.forwardRef)(function Heatmap2({ data, context, options }, ref) {
+var Heatmap = (0, import_react.forwardRef)(function Heatmap2({ data, previousData, context, options }, ref) {
   const containerRef = (0, import_react.useRef)(null);
   const chartRef = (0, import_react.useRef)(null);
   (0, import_react.useEffect)(() => {
@@ -40,8 +40,17 @@ var Heatmap = (0, import_react.forwardRef)(function Heatmap2({ data, context, op
     };
   }, []);
   (0, import_react.useEffect)(() => {
-    chartRef.current?.load(data, context);
-  }, [data, context]);
+    if (previousData !== void 0) {
+      chartRef.current?.loadDiff(data, previousData, context);
+    } else {
+      chartRef.current?.load(data, context);
+    }
+  }, [data, previousData, context]);
+  (0, import_react.useEffect)(() => {
+    if (options?.palette) {
+      chartRef.current?.setPalette(options.palette);
+    }
+  }, [options?.palette]);
   (0, import_react.useImperativeHandle)(
     ref,
     () => ({

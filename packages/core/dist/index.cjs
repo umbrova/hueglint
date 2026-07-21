@@ -609,6 +609,20 @@ var _Heatmap = class _Heatmap {
     }
     this.applyAggregationAndRender();
   }
+  setPalette(palette) {
+    if (!isValidPalette(palette)) {
+      console.warn(`[hueglint] setPalette(): invalid palette "${palette}", ignoring.`);
+      return;
+    }
+    this.palette = palette;
+    if (this.mode === "normal") {
+      this.applyAggregationAndRender();
+    } else if (this.mode === "diff") {
+      console.warn(
+        "[hueglint] setPalette() has no effect in diff mode \u2014 diff mode always uses the diverging palette."
+      );
+    }
+  }
   applyAggregationAndRender() {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
