@@ -5,26 +5,24 @@
 
 [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/Development/projects/hueglint/packages/core[39m
 
- [32m✓[39m test/responsive.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1165[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap responsive rendering[2m > [22mrenders fewer cells than raw data when the container is too small for one-to-one rendering [33m971[2mms[22m[39m
- [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1209[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders diff cells only for matching (row, col) pairs, warning on mismatches [33m768[2mms[22m[39m
- [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 1280[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mmakes exactly one cell tabbable at a time (roving tabindex) [33m942[2mms[22m[39m
- [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1553[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mshows a Loading state immediately after construction, before load() is called [33m692[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mclears the Loading state once real data loads successfully [33m358[2mms[22m[39m
- [32m✓[39m test/render.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 1755[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders one rect per cell [33m796[2mms[22m[39m
- [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1801[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders an accessible table alongside the visual chart [33m976[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mgives each instance a unique table id, even with identical data [33m332[2mms[22m[39m
- [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1934[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mshows tooltip content on hover and hides on mouseleave [33m928[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mdismisses the tooltip when tapping/clicking outside the chart [33m347[2mms[22m[39m
+ [32m✓[39m test/responsive.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 801[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap responsive rendering[2m > [22mrenders fewer cells than raw data when the container is too small for one-to-one rendering [33m690[2mms[22m[39m
+ [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 864[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mmakes exactly one cell tabbable at a time (roving tabindex) [33m771[2mms[22m[39m
+ [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 907[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mshows tooltip content on hover and hides on mouseleave [33m550[2mms[22m[39m
+ [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 917[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mshows a Loading state immediately after construction, before load() is called [33m334[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mcalls onError with the actual error object [33m317[2mms[22m[39m
+ [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 946[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders an accessible table alongside the visual chart [33m598[2mms[22m[39m
+ [32m✓[39m test/render.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 1012[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders one rect per cell [33m720[2mms[22m[39m
+ [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1030[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders diff cells only for matching (row, col) pairs, warning on mismatches [33m877[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
 [2m      Tests [22m [1m[32m41 passed[39m[22m[90m (41)[39m
-[2m   Start at [22m 23:49:37
-[2m   Duration [22m 35.58s[2m (transform 15.38s, setup 18.95s, collect 75.22s, tests 10.70s, environment 132.37s, prepare 3.06s)[22m
+[2m   Start at [22m 00:19:55
+[2m   Duration [22m 18.03s[2m (transform 737ms, setup 370ms, collect 4.80s, tests 6.48s, environment 107.00s, prepare 2.64s)[22m
 

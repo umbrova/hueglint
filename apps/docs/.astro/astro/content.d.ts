@@ -152,27 +152,20 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"docs": {
-"core-concepts/data-format.md": {
-	id: "core-concepts/data-format.md";
-  slug: "core-concepts/data-format";
+"docs/core-concepts/data-format.md": {
+	id: "docs/core-concepts/data-format.md";
+  slug: "docs/core-concepts/data-format";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"getting-started/installation.md": {
-	id: "getting-started/installation.md";
-  slug: "getting-started/installation";
+"docs/getting-started/installation.md": {
+	id: "docs/getting-started/installation.md";
+  slug: "docs/getting-started/installation";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"index.mdx": {
-	id: "index.mdx";
-  slug: "index";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".mdx"] };
 };
 
 	};

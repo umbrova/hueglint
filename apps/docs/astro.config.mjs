@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import react from '@astrojs/react';
 
 export default defineConfig({
   integrations: [
@@ -7,9 +8,10 @@ export default defineConfig({
       title: 'hueglint',
       description: 'Clarity, not just color.',
       sidebar: [
-        { label: 'Getting started', autogenerate: { directory: 'getting-started' } },
-        { label: 'Core concepts', autogenerate: { directory: 'core-concepts' } },
+        { label: 'Getting started', autogenerate: { directory: 'docs/getting-started' } },
+        { label: 'Core concepts', autogenerate: { directory: 'docs/core-concepts' } },
       ],
     }),
+    react(),
   ],
 });
