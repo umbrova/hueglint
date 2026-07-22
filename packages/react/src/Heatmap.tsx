@@ -47,6 +47,11 @@ export const Heatmap = forwardRef<HeatmapHandle, HeatmapProps>(function Heatmap(
     }
   }, [options?.palette]);
 
+
+  useEffect(() => {
+    chartRef.current?.setMinCellSize(options?.minCellSize);
+  }, [options?.minCellSize]);
+
   useImperativeHandle(
     ref,
     () => ({

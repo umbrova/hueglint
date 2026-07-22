@@ -9,10 +9,9 @@ export default function Playground() {
   const [datasetKey, setDatasetKey] = useState<keyof typeof datasets>('serverLoad');
   const [palette, setPalette] = useState<Palette>('viridis');
   const [diffMode, setDiffMode] = useState(false);
+  const [showEveryCell, setShowEveryCell] = useState(false);
 
   const active = datasets[datasetKey];
-  const rowCount = new Set(active.data.map((c) => c.row)).size;
-  const panelHeight = Math.max(240, rowCount * 5);
 
   return (
     <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
@@ -20,7 +19,7 @@ export default function Playground() {
         style={{
           flex: '1 1 400px',
           minWidth: '300px',
-          height:  `${panelHeight}px`,
+          height: '320px',
           border: '1px solid #444',
           borderRadius: '8px',
           padding: '1rem',
@@ -30,7 +29,7 @@ export default function Playground() {
           data={active.data}
           previousData={diffMode ? active.previousData : undefined}
           context={active.context}
-          options={{ palette }}
+          options={{ palette, minCellSize: showEveryCell ? 1 : undefined }}
         />
       </div>
       <div style={{ minWidth: '180px' }}>
@@ -68,6 +67,15 @@ export default function Playground() {
         <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '13px' }}>
           <input type="checkbox" checked={diffMode} onChange={(e) => setDiffMode(e.target.checked)} />
           Compare to previous period
+        </label>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', fontSize: '13px' }}>
+          <input
+            type="checkbox"
+            checked={showEveryCell}
+            onChange={(e) => setShowEveryCell(e.target.checked)}
+          />
+          Show every cell (disable touch-target protection)
         </label>
       </div>
     </div>

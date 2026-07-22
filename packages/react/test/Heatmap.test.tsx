@@ -72,4 +72,13 @@ describe('Heatmap (React)', () => {
     const headers = Array.from(container.querySelectorAll('th')).map((th) => th.textContent);
     expect(headers).toEqual(expect.arrayContaining(['Previous', 'Current', 'Change']));
   });
+
+  it('calls setMinCellSize on the chart when the minCellSize option changes, without recreating the container', () => {
+    const sample = [{ row: 'Mon', col: '8am', value: 1 }];
+    const { container, rerender } = render(<Heatmap data={sample} options={{ minCellSize: 44 }} />);
+    const svgBefore = container.querySelector('svg');
+    rerender(<Heatmap data={sample} options={{ minCellSize: 1 }} />);
+    expect(container.querySelector('svg')).toBe(svgBefore);
+  });
+
 });

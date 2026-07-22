@@ -53,6 +53,7 @@ declare class Heatmap {
     loadDiff(current: unknown, previous: unknown, context?: HeatmapContext): void;
     update(row: string | number, col: string | number, value: number): void;
     setPalette(palette: Palette): void;
+    setMinCellSize(size?: number): void;
     private applyAggregationAndRender;
     private handleError;
     private showState;

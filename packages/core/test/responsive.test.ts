@@ -98,4 +98,25 @@ describe('Heatmap responsive rendering', () => {
     ]);
     expect(el.querySelectorAll('rect').length).toBe(4); // no aggregation at 5px minimum
   });
+
+  it('setMinCellSize() reconfigures an existing chart without recreating it, and can revert to default', () => {
+    const el = document.createElement('div');
+    Object.defineProperty(el, 'clientWidth', { value: 80, configurable: true });
+    Object.defineProperty(el, 'clientHeight', { value: 80, configurable: true });
+    const chart = new Heatmap(el);
+    chart.load([
+      { row: 'Mon', col: '8am', value: 1 }, { row: 'Mon', col: '9am', value: 2 },
+      { row: 'Tue', col: '8am', value: 3 }, { row: 'Tue', col: '9am', value: 4 },
+    ]);
+    const svgBefore = el.querySelector('svg');
+    expect(el.querySelectorAll('rect').length).toBeLessThan(4); // aggregated by default
+
+    chart.setMinCellSize(1);
+    expect(el.querySelector('svg')).toBe(svgBefore); // same instance, not recreated
+    expect(el.querySelectorAll('rect').length).toBe(4); // full resolution now
+
+    chart.setMinCellSize(undefined);
+    expect(el.querySelectorAll('rect').length).toBeLessThan(4); // reverts to aggregated default
+  });
+
 });
