@@ -11,9 +11,6 @@ const compareData = [
 const rows = ['Mon', 'Tue', 'Wed', 'Thu'];
 const cols = ['8am', '9am', '10am', '11am'];
 
-// A classic, non-CVD-safe scale — hueglint's own palette system has no
-// equivalent to this by design, so it's built by hand here purely to
-// show the contrast, not as something hueglint could ever render itself.
 function typicalColor(value: number): string {
   const t = value / 100;
   const stops: [number, [number, number, number]][] = [
@@ -40,94 +37,93 @@ export default function AccessibilityProof() {
   const [showTable, setShowTable] = useState(false);
 
   return (
-    <section style={{ marginTop: '3rem' }}>
-      <h2>Why hueglint</h2>
+    <section className="mt-12">
+      <h2 className="mb-4 text-xl font-medium">Why hueglint</h2>
 
-      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', marginBottom: '4px' }}>
-        <input type="checkbox" checked={grayscale} onChange={(e) => setGrayscale(e.target.checked)} />
+      <label className="flex items-center gap-2 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          checked={grayscale}
+          onChange={(e) => setGrayscale(e.target.checked)}
+          className="accent-brand-accent"
+        />
         Simulate low color vision (grayscale test)
       </label>
-      <p style={{ fontSize: '12px', color: '#888', marginBottom: '1rem' }}>
-        A grayscale filter, not a precise deuteranopia/protanopia simulation — but the standard, honest proxy
-        test for "does this design rely on hue alone."
+      <p className="mb-4 mt-1 text-xs text-gray-500">
+        A grayscale filter, not a precise deuteranopia/protanopia simulation — but the standard, honest
+        proxy test for "does this design rely on hue alone."
       </p>
 
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 260px' }}>
-          <p style={{ fontSize: '13px', textAlign: 'center', margin: '0 0 8px' }}>Typical heatmap (not hueglint)</p>
+      <div className="flex flex-wrap gap-6">
+        <div className="min-w-[260px] flex-1">
+          <p className="mb-2 text-center text-sm text-gray-700">Typical heatmap (not hueglint)</p>
           <div
+            className="grid gap-[3px] rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
             style={{
-              display: 'grid',
               gridTemplateColumns: `repeat(${cols.length}, 1fr)`,
               gridTemplateRows: `repeat(${rows.length}, 1fr)`,
-              gap: '3px',
               height: '220px',
               filter: grayscale ? 'grayscale(1)' : 'none',
-              transition: 'filter .3s',
-              border: '1px solid #444',
-              borderRadius: '8px',
-              padding: '10px',
             }}
           >
             {rows.flatMap((r) =>
               cols.map((c) => {
                 const cell = compareData.find((d) => d.row === r && d.col === c)!;
                 return (
-                  <div key={`${r}-${c}`} style={{ borderRadius: '3px', background: typicalColor(cell.value) }} />
+                  <div
+                    key={`${r}-${c}`}
+                    className="rounded-sm"
+                    style={{ background: typicalColor(cell.value) }}
+                  />
                 );
               })
             )}
           </div>
-          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '6px' }}>
-            Values collapse into each other
-          </p>
+          <p className="mt-1.5 text-center text-xs text-gray-500">Values collapse into each other</p>
         </div>
 
-        <div style={{ flex: '1 1 260px' }}>
-          <p style={{ fontSize: '13px', textAlign: 'center', margin: '0 0 8px' }}>hueglint (viridis, CVD-safe)</p>
+        <div className="min-w-[260px] flex-1">
+          <p className="mb-2 text-center text-sm text-gray-700">hueglint (viridis, CVD-safe)</p>
           <div
-            style={{
-              height: '220px',
-              border: '1px solid #444',
-              borderRadius: '8px',
-              padding: '10px',
-              filter: grayscale ? 'grayscale(1)' : 'none',
-              transition: 'filter .3s',
-            }}
+            className="h-[220px] rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
+            style={{ filter: grayscale ? 'grayscale(1)' : 'none' }}
           >
             <Heatmap data={compareData} options={{ palette: 'viridis' }} />
           </div>
-          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginTop: '6px' }}>
-            Still readable by lightness alone
-          </p>
+          <p className="mt-1.5 text-center text-xs text-gray-500">Still readable by lightness alone</p>
         </div>
       </div>
 
-      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', margin: '1.5rem 0 4px' }}>
-        <input type="checkbox" checked={showTable} onChange={(e) => setShowTable(e.target.checked)} />
+      <label className="mt-6 flex items-center gap-2 text-sm text-gray-700">
+        <input
+          type="checkbox"
+          checked={showTable}
+          onChange={(e) => setShowTable(e.target.checked)}
+          className="accent-brand-accent"
+        />
         Show accessible table view
       </label>
-      <p style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>
-        This mirrors the ARIA-linked data table hueglint automatically generates for every chart, for screen
-        reader users — present whether or not this toggle is on.
+      <p className="mb-2 mt-1 text-xs text-gray-500">
+        This mirrors the ARIA-linked data table hueglint automatically generates for every chart, for
+        screen reader users — present whether or not this toggle is on.
       </p>
 
       {showTable && (
-        <table style={{ fontSize: '13px', borderCollapse: 'collapse', width: '100%', maxWidth: '400px' }}>
-          <caption style={{ textAlign: 'left', marginBottom: '6px' }}>Requests by day and hour</caption>
+        <table className="w-full max-w-md border-collapse text-sm">
+          <caption className="mb-1.5 text-left text-gray-700">Requests by day and hour</caption>
           <thead>
             <tr>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #444', padding: '4px' }}>Day</th>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #444', padding: '4px' }}>Hour</th>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #444', padding: '4px' }}>Requests</th>
+              <th className="border-b border-gray-300 p-1 text-left">Day</th>
+              <th className="border-b border-gray-300 p-1 text-left">Hour</th>
+              <th className="border-b border-gray-300 p-1 text-left">Requests</th>
             </tr>
           </thead>
           <tbody>
             {compareData.map((d, i) => (
               <tr key={i}>
-                <td style={{ padding: '4px', borderBottom: '1px solid #333' }}>{d.row}</td>
-                <td style={{ padding: '4px', borderBottom: '1px solid #333' }}>{d.col}</td>
-                <td style={{ padding: '4px', borderBottom: '1px solid #333' }}>{d.value}</td>
+                <td className="border-b border-gray-200 p-1">{d.row}</td>
+                <td className="border-b border-gray-200 p-1">{d.col}</td>
+                <td className="border-b border-gray-200 p-1">{d.value}</td>
               </tr>
             ))}
           </tbody>

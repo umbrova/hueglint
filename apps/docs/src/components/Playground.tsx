@@ -14,17 +14,8 @@ export default function Playground() {
   const active = datasets[datasetKey];
 
   return (
-    <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-      <div
-        style={{
-          flex: '1 1 400px',
-          minWidth: '300px',
-          height: '320px',
-          border: '1px solid #444',
-          borderRadius: '8px',
-          padding: '1rem',
-        }}
-      >
+    <div className="flex flex-wrap items-start gap-6">
+      <div className="h-[320px] flex-1 min-w-[300px] rounded-lg border border-gray-200 p-4">
         <Heatmap
           data={active.data}
           previousData={diffMode ? active.previousData : undefined}
@@ -32,48 +23,61 @@ export default function Playground() {
           options={{ palette, minCellSize: showEveryCell ? 1 : undefined }}
         />
       </div>
-      <div style={{ minWidth: '180px' }}>
-        <label htmlFor="dataset-select" style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>
-          Sample data
-        </label>
-        <select
-          id="dataset-select"
-          value={datasetKey}
-          onChange={(e) => setDatasetKey(e.target.value as keyof typeof datasets)}
-        >
-          {Object.entries(datasets).map(([key, d]) => (
-            <option key={key} value={key}>
-              {d.label}
-            </option>
-          ))}
-        </select>
 
-        <label htmlFor="palette-select" style={{ display: 'block', fontSize: '13px', marginTop: '14px', marginBottom: '4px' }}>
-          Palette
-        </label>
-        <select
-          id="palette-select"
-          value={palette}
-          onChange={(e) => setPalette(e.target.value as Palette)}
-          disabled={diffMode}
-        >
-          {PALETTES.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
+      <div className="min-w-[180px] space-y-4">
+        <div>
+          <label htmlFor="dataset-select" className="mb-1 block text-sm text-gray-600">
+            Sample data
+          </label>
+          <select
+            id="dataset-select"
+            value={datasetKey}
+            onChange={(e) => setDatasetKey(e.target.value as keyof typeof datasets)}
+            className="rounded border border-gray-300 px-2 py-1 text-sm"
+          >
+            {Object.entries(datasets).map(([key, d]) => (
+              <option key={key} value={key}>
+                {d.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '14px', fontSize: '13px' }}>
-          <input type="checkbox" checked={diffMode} onChange={(e) => setDiffMode(e.target.checked)} />
+        <div>
+          <label htmlFor="palette-select" className="mb-1 block text-sm text-gray-600">
+            Palette
+          </label>
+          <select
+            id="palette-select"
+            value={palette}
+            onChange={(e) => setPalette(e.target.value as Palette)}
+            disabled={diffMode}
+            className="rounded border border-gray-300 px-2 py-1 text-sm disabled:opacity-50"
+          >
+            {PALETTES.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            checked={diffMode}
+            onChange={(e) => setDiffMode(e.target.checked)}
+            className="accent-brand-accent"
+          />
           Compare to previous period
         </label>
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', fontSize: '13px' }}>
+        <label className="flex items-center gap-2 text-sm text-gray-700">
           <input
             type="checkbox"
             checked={showEveryCell}
             onChange={(e) => setShowEveryCell(e.target.checked)}
+            className="accent-brand-accent"
           />
           Show every cell (disable touch-target protection)
         </label>
