@@ -1,0 +1,652 @@
+{
+  "label": "Support tickets",
+  "context": {
+    "rowLabel": "Category",
+    "colLabel": "Week",
+    "valueLabel": "Tickets"
+  },
+  "data": [
+    {
+      "row": "Billing",
+      "col": "Week 1",
+      "value": 15
+    },
+    {
+      "row": "Billing",
+      "col": "Week 2",
+      "value": 20
+    },
+    {
+      "row": "Billing",
+      "col": "Week 3",
+      "value": 23
+    },
+    {
+      "row": "Billing",
+      "col": "Week 4",
+      "value": 22
+    },
+    {
+      "row": "Billing",
+      "col": "Week 5",
+      "value": 20
+    },
+    {
+      "row": "Billing",
+      "col": "Week 6",
+      "value": 19
+    },
+    {
+      "row": "Billing",
+      "col": "Week 7",
+      "value": 15
+    },
+    {
+      "row": "Billing",
+      "col": "Week 8",
+      "value": 11
+    },
+    {
+      "row": "Login",
+      "col": "Week 1",
+      "value": 18
+    },
+    {
+      "row": "Login",
+      "col": "Week 2",
+      "value": 23
+    },
+    {
+      "row": "Login",
+      "col": "Week 3",
+      "value": 26
+    },
+    {
+      "row": "Login",
+      "col": "Week 4",
+      "value": 25
+    },
+    {
+      "row": "Login",
+      "col": "Week 5",
+      "value": 24
+    },
+    {
+      "row": "Login",
+      "col": "Week 6",
+      "value": 20
+    },
+    {
+      "row": "Login",
+      "col": "Week 7",
+      "value": 17
+    },
+    {
+      "row": "Login",
+      "col": "Week 8",
+      "value": 13
+    },
+    {
+      "row": "Bug",
+      "col": "Week 1",
+      "value": 19
+    },
+    {
+      "row": "Bug",
+      "col": "Week 2",
+      "value": 21
+    },
+    {
+      "row": "Bug",
+      "col": "Week 3",
+      "value": 26
+    },
+    {
+      "row": "Bug",
+      "col": "Week 4",
+      "value": 29
+    },
+    {
+      "row": "Bug",
+      "col": "Week 5",
+      "value": 25
+    },
+    {
+      "row": "Bug",
+      "col": "Week 6",
+      "value": 24
+    },
+    {
+      "row": "Bug",
+      "col": "Week 7",
+      "value": 18
+    },
+    {
+      "row": "Bug",
+      "col": "Week 8",
+      "value": 13
+    },
+    {
+      "row": "Feature",
+      "col": "Week 1",
+      "value": 18
+    },
+    {
+      "row": "Feature",
+      "col": "Week 2",
+      "value": 20
+    },
+    {
+      "row": "Feature",
+      "col": "Week 3",
+      "value": 26
+    },
+    {
+      "row": "Feature",
+      "col": "Week 4",
+      "value": 28
+    },
+    {
+      "row": "Feature",
+      "col": "Week 5",
+      "value": 24
+    },
+    {
+      "row": "Feature",
+      "col": "Week 6",
+      "value": 22
+    },
+    {
+      "row": "Feature",
+      "col": "Week 7",
+      "value": 16
+    },
+    {
+      "row": "Feature",
+      "col": "Week 8",
+      "value": 14
+    },
+    {
+      "row": "Performance",
+      "col": "Week 1",
+      "value": 15
+    },
+    {
+      "row": "Performance",
+      "col": "Week 2",
+      "value": 18
+    },
+    {
+      "row": "Performance",
+      "col": "Week 3",
+      "value": 21
+    },
+    {
+      "row": "Performance",
+      "col": "Week 4",
+      "value": 24
+    },
+    {
+      "row": "Performance",
+      "col": "Week 5",
+      "value": 22
+    },
+    {
+      "row": "Performance",
+      "col": "Week 6",
+      "value": 20
+    },
+    {
+      "row": "Performance",
+      "col": "Week 7",
+      "value": 16
+    },
+    {
+      "row": "Performance",
+      "col": "Week 8",
+      "value": 12
+    },
+    {
+      "row": "Security",
+      "col": "Week 1",
+      "value": 12
+    },
+    {
+      "row": "Security",
+      "col": "Week 2",
+      "value": 16
+    },
+    {
+      "row": "Security",
+      "col": "Week 3",
+      "value": 18
+    },
+    {
+      "row": "Security",
+      "col": "Week 4",
+      "value": 18
+    },
+    {
+      "row": "Security",
+      "col": "Week 5",
+      "value": 18
+    },
+    {
+      "row": "Security",
+      "col": "Week 6",
+      "value": 15
+    },
+    {
+      "row": "Security",
+      "col": "Week 7",
+      "value": 13
+    },
+    {
+      "row": "Security",
+      "col": "Week 8",
+      "value": 9
+    },
+    {
+      "row": "UI",
+      "col": "Week 1",
+      "value": 10
+    },
+    {
+      "row": "UI",
+      "col": "Week 2",
+      "value": 12
+    },
+    {
+      "row": "UI",
+      "col": "Week 3",
+      "value": 13
+    },
+    {
+      "row": "UI",
+      "col": "Week 4",
+      "value": 13
+    },
+    {
+      "row": "UI",
+      "col": "Week 5",
+      "value": 12
+    },
+    {
+      "row": "UI",
+      "col": "Week 6",
+      "value": 11
+    },
+    {
+      "row": "UI",
+      "col": "Week 7",
+      "value": 10
+    },
+    {
+      "row": "UI",
+      "col": "Week 8",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 1",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 2",
+      "value": 8
+    },
+    {
+      "row": "Other",
+      "col": "Week 3",
+      "value": 8
+    },
+    {
+      "row": "Other",
+      "col": "Week 4",
+      "value": 9
+    },
+    {
+      "row": "Other",
+      "col": "Week 5",
+      "value": 9
+    },
+    {
+      "row": "Other",
+      "col": "Week 6",
+      "value": 8
+    },
+    {
+      "row": "Other",
+      "col": "Week 7",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 8",
+      "value": 5
+    }
+  ],
+  "previousData": [
+    {
+      "row": "Billing",
+      "col": "Week 1",
+      "value": 14
+    },
+    {
+      "row": "Billing",
+      "col": "Week 2",
+      "value": 19
+    },
+    {
+      "row": "Billing",
+      "col": "Week 3",
+      "value": 23
+    },
+    {
+      "row": "Billing",
+      "col": "Week 4",
+      "value": 20
+    },
+    {
+      "row": "Billing",
+      "col": "Week 5",
+      "value": 21
+    },
+    {
+      "row": "Billing",
+      "col": "Week 6",
+      "value": 20
+    },
+    {
+      "row": "Billing",
+      "col": "Week 7",
+      "value": 17
+    },
+    {
+      "row": "Billing",
+      "col": "Week 8",
+      "value": 10
+    },
+    {
+      "row": "Login",
+      "col": "Week 1",
+      "value": 18
+    },
+    {
+      "row": "Login",
+      "col": "Week 2",
+      "value": 28
+    },
+    {
+      "row": "Login",
+      "col": "Week 3",
+      "value": 27
+    },
+    {
+      "row": "Login",
+      "col": "Week 4",
+      "value": 26
+    },
+    {
+      "row": "Login",
+      "col": "Week 5",
+      "value": 21
+    },
+    {
+      "row": "Login",
+      "col": "Week 6",
+      "value": 18
+    },
+    {
+      "row": "Login",
+      "col": "Week 7",
+      "value": 17
+    },
+    {
+      "row": "Login",
+      "col": "Week 8",
+      "value": 12
+    },
+    {
+      "row": "Bug",
+      "col": "Week 1",
+      "value": 17
+    },
+    {
+      "row": "Bug",
+      "col": "Week 2",
+      "value": 20
+    },
+    {
+      "row": "Bug",
+      "col": "Week 3",
+      "value": 25
+    },
+    {
+      "row": "Bug",
+      "col": "Week 4",
+      "value": 26
+    },
+    {
+      "row": "Bug",
+      "col": "Week 5",
+      "value": 22
+    },
+    {
+      "row": "Bug",
+      "col": "Week 6",
+      "value": 20
+    },
+    {
+      "row": "Bug",
+      "col": "Week 7",
+      "value": 16
+    },
+    {
+      "row": "Bug",
+      "col": "Week 8",
+      "value": 14
+    },
+    {
+      "row": "Feature",
+      "col": "Week 1",
+      "value": 21
+    },
+    {
+      "row": "Feature",
+      "col": "Week 2",
+      "value": 17
+    },
+    {
+      "row": "Feature",
+      "col": "Week 3",
+      "value": 22
+    },
+    {
+      "row": "Feature",
+      "col": "Week 4",
+      "value": 31
+    },
+    {
+      "row": "Feature",
+      "col": "Week 5",
+      "value": 26
+    },
+    {
+      "row": "Feature",
+      "col": "Week 6",
+      "value": 24
+    },
+    {
+      "row": "Feature",
+      "col": "Week 7",
+      "value": 17
+    },
+    {
+      "row": "Feature",
+      "col": "Week 8",
+      "value": 11
+    },
+    {
+      "row": "Performance",
+      "col": "Week 1",
+      "value": 14
+    },
+    {
+      "row": "Performance",
+      "col": "Week 2",
+      "value": 17
+    },
+    {
+      "row": "Performance",
+      "col": "Week 3",
+      "value": 23
+    },
+    {
+      "row": "Performance",
+      "col": "Week 4",
+      "value": 22
+    },
+    {
+      "row": "Performance",
+      "col": "Week 5",
+      "value": 22
+    },
+    {
+      "row": "Performance",
+      "col": "Week 6",
+      "value": 24
+    },
+    {
+      "row": "Performance",
+      "col": "Week 7",
+      "value": 13
+    },
+    {
+      "row": "Performance",
+      "col": "Week 8",
+      "value": 12
+    },
+    {
+      "row": "Security",
+      "col": "Week 1",
+      "value": 13
+    },
+    {
+      "row": "Security",
+      "col": "Week 2",
+      "value": 16
+    },
+    {
+      "row": "Security",
+      "col": "Week 3",
+      "value": 20
+    },
+    {
+      "row": "Security",
+      "col": "Week 4",
+      "value": 17
+    },
+    {
+      "row": "Security",
+      "col": "Week 5",
+      "value": 20
+    },
+    {
+      "row": "Security",
+      "col": "Week 6",
+      "value": 15
+    },
+    {
+      "row": "Security",
+      "col": "Week 7",
+      "value": 14
+    },
+    {
+      "row": "Security",
+      "col": "Week 8",
+      "value": 9
+    },
+    {
+      "row": "UI",
+      "col": "Week 1",
+      "value": 10
+    },
+    {
+      "row": "UI",
+      "col": "Week 2",
+      "value": 14
+    },
+    {
+      "row": "UI",
+      "col": "Week 3",
+      "value": 13
+    },
+    {
+      "row": "UI",
+      "col": "Week 4",
+      "value": 14
+    },
+    {
+      "row": "UI",
+      "col": "Week 5",
+      "value": 13
+    },
+    {
+      "row": "UI",
+      "col": "Week 6",
+      "value": 13
+    },
+    {
+      "row": "UI",
+      "col": "Week 7",
+      "value": 10
+    },
+    {
+      "row": "UI",
+      "col": "Week 8",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 1",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 2",
+      "value": 8
+    },
+    {
+      "row": "Other",
+      "col": "Week 3",
+      "value": 8
+    },
+    {
+      "row": "Other",
+      "col": "Week 4",
+      "value": 10
+    },
+    {
+      "row": "Other",
+      "col": "Week 5",
+      "value": 9
+    },
+    {
+      "row": "Other",
+      "col": "Week 6",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 7",
+      "value": 7
+    },
+    {
+      "row": "Other",
+      "col": "Week 8",
+      "value": 5
+    }
+  ]
+}

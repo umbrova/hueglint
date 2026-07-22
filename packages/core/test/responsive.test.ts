@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { Heatmap } from '../src/index';
 import { computeAggregationFactor, aggregateData } from '../src/aggregate';
 
@@ -66,5 +66,36 @@ describe('Heatmap responsive rendering', () => {
       { row: 'Mon', col: '9am', value: 2 },
     ]);
     expect(el.querySelectorAll('rect').length).toBe(2);
+  });
+
+  it('respects a custom minCellSize, allowing smaller cells than the default 44px', () => {
+    expect(computeAggregationFactor(100, 100, 20, 20, 5)).toBe(1); // 5px cells, no aggregation needed
+  });
+
+  it('falls back to the default minCellSize when an invalid value is passed to the chart', () => {
+    const el = document.createElement('div');
+    Object.defineProperty(el, 'clientWidth', { value: 80, configurable: true });
+    Object.defineProperty(el, 'clientHeight', { value: 80, configurable: true });
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const chart = new Heatmap(el, { minCellSize: -5 });
+    chart.load([
+      { row: 'Mon', col: '8am', value: 1 }, { row: 'Mon', col: '9am', value: 2 },
+      { row: 'Tue', col: '8am', value: 3 }, { row: 'Tue', col: '9am', value: 4 },
+    ]);
+    expect(el.querySelectorAll('rect').length).toBeLessThan(4); // still aggregated using the 44px default
+    expect(warnSpy).toHaveBeenCalled();
+    warnSpy.mockRestore();
+  });
+
+  it('renders full resolution in a small container when minCellSize is explicitly lowered', () => {
+    const el = document.createElement('div');
+    Object.defineProperty(el, 'clientWidth', { value: 80, configurable: true });
+    Object.defineProperty(el, 'clientHeight', { value: 80, configurable: true });
+    const chart = new Heatmap(el, { minCellSize: 5 });
+    chart.load([
+      { row: 'Mon', col: '8am', value: 1 }, { row: 'Mon', col: '9am', value: 2 },
+      { row: 'Tue', col: '8am', value: 3 }, { row: 'Tue', col: '9am', value: 4 },
+    ]);
+    expect(el.querySelectorAll('rect').length).toBe(4); // no aggregation at 5px minimum
   });
 });

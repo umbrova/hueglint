@@ -1,0 +1,652 @@
+{
+  "label": "Sales by region",
+  "context": {
+    "rowLabel": "Region",
+    "colLabel": "Month",
+    "valueLabel": "Revenue ($k)"
+  },
+  "data": [
+    {
+      "row": "North",
+      "col": "Jan",
+      "value": 21
+    },
+    {
+      "row": "North",
+      "col": "Feb",
+      "value": 24
+    },
+    {
+      "row": "North",
+      "col": "Mar",
+      "value": 26
+    },
+    {
+      "row": "North",
+      "col": "Apr",
+      "value": 30
+    },
+    {
+      "row": "North",
+      "col": "May",
+      "value": 38
+    },
+    {
+      "row": "North",
+      "col": "Jun",
+      "value": 43
+    },
+    {
+      "row": "North",
+      "col": "Jul",
+      "value": 44
+    },
+    {
+      "row": "North",
+      "col": "Aug",
+      "value": 46
+    },
+    {
+      "row": "South",
+      "col": "Jan",
+      "value": 21
+    },
+    {
+      "row": "South",
+      "col": "Feb",
+      "value": 24
+    },
+    {
+      "row": "South",
+      "col": "Mar",
+      "value": 31
+    },
+    {
+      "row": "South",
+      "col": "Apr",
+      "value": 35
+    },
+    {
+      "row": "South",
+      "col": "May",
+      "value": 42
+    },
+    {
+      "row": "South",
+      "col": "Jun",
+      "value": 51
+    },
+    {
+      "row": "South",
+      "col": "Jul",
+      "value": 51
+    },
+    {
+      "row": "South",
+      "col": "Aug",
+      "value": 57
+    },
+    {
+      "row": "East",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "East",
+      "col": "Feb",
+      "value": 28
+    },
+    {
+      "row": "East",
+      "col": "Mar",
+      "value": 30
+    },
+    {
+      "row": "East",
+      "col": "Apr",
+      "value": 43
+    },
+    {
+      "row": "East",
+      "col": "May",
+      "value": 46
+    },
+    {
+      "row": "East",
+      "col": "Jun",
+      "value": 56
+    },
+    {
+      "row": "East",
+      "col": "Jul",
+      "value": 66
+    },
+    {
+      "row": "East",
+      "col": "Aug",
+      "value": 70
+    },
+    {
+      "row": "West",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "West",
+      "col": "Feb",
+      "value": 26
+    },
+    {
+      "row": "West",
+      "col": "Mar",
+      "value": 36
+    },
+    {
+      "row": "West",
+      "col": "Apr",
+      "value": 42
+    },
+    {
+      "row": "West",
+      "col": "May",
+      "value": 55
+    },
+    {
+      "row": "West",
+      "col": "Jun",
+      "value": 67
+    },
+    {
+      "row": "West",
+      "col": "Jul",
+      "value": 73
+    },
+    {
+      "row": "West",
+      "col": "Aug",
+      "value": 78
+    },
+    {
+      "row": "Northeast",
+      "col": "Jan",
+      "value": 24
+    },
+    {
+      "row": "Northeast",
+      "col": "Feb",
+      "value": 30
+    },
+    {
+      "row": "Northeast",
+      "col": "Mar",
+      "value": 33
+    },
+    {
+      "row": "Northeast",
+      "col": "Apr",
+      "value": 46
+    },
+    {
+      "row": "Northeast",
+      "col": "May",
+      "value": 54
+    },
+    {
+      "row": "Northeast",
+      "col": "Jun",
+      "value": 67
+    },
+    {
+      "row": "Northeast",
+      "col": "Jul",
+      "value": 79
+    },
+    {
+      "row": "Northeast",
+      "col": "Aug",
+      "value": 77
+    },
+    {
+      "row": "Southeast",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "Southeast",
+      "col": "Feb",
+      "value": 29
+    },
+    {
+      "row": "Southeast",
+      "col": "Mar",
+      "value": 32
+    },
+    {
+      "row": "Southeast",
+      "col": "Apr",
+      "value": 43
+    },
+    {
+      "row": "Southeast",
+      "col": "May",
+      "value": 59
+    },
+    {
+      "row": "Southeast",
+      "col": "Jun",
+      "value": 71
+    },
+    {
+      "row": "Southeast",
+      "col": "Jul",
+      "value": 69
+    },
+    {
+      "row": "Southeast",
+      "col": "Aug",
+      "value": 73
+    },
+    {
+      "row": "Northwest",
+      "col": "Jan",
+      "value": 22
+    },
+    {
+      "row": "Northwest",
+      "col": "Feb",
+      "value": 28
+    },
+    {
+      "row": "Northwest",
+      "col": "Mar",
+      "value": 34
+    },
+    {
+      "row": "Northwest",
+      "col": "Apr",
+      "value": 42
+    },
+    {
+      "row": "Northwest",
+      "col": "May",
+      "value": 48
+    },
+    {
+      "row": "Northwest",
+      "col": "Jun",
+      "value": 55
+    },
+    {
+      "row": "Northwest",
+      "col": "Jul",
+      "value": 69
+    },
+    {
+      "row": "Northwest",
+      "col": "Aug",
+      "value": 70
+    },
+    {
+      "row": "Southwest",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "Southwest",
+      "col": "Feb",
+      "value": 27
+    },
+    {
+      "row": "Southwest",
+      "col": "Mar",
+      "value": 30
+    },
+    {
+      "row": "Southwest",
+      "col": "Apr",
+      "value": 32
+    },
+    {
+      "row": "Southwest",
+      "col": "May",
+      "value": 44
+    },
+    {
+      "row": "Southwest",
+      "col": "Jun",
+      "value": 48
+    },
+    {
+      "row": "Southwest",
+      "col": "Jul",
+      "value": 56
+    },
+    {
+      "row": "Southwest",
+      "col": "Aug",
+      "value": 60
+    }
+  ],
+  "previousData": [
+    {
+      "row": "North",
+      "col": "Jan",
+      "value": 17
+    },
+    {
+      "row": "North",
+      "col": "Feb",
+      "value": 21
+    },
+    {
+      "row": "North",
+      "col": "Mar",
+      "value": 25
+    },
+    {
+      "row": "North",
+      "col": "Apr",
+      "value": 30
+    },
+    {
+      "row": "North",
+      "col": "May",
+      "value": 38
+    },
+    {
+      "row": "North",
+      "col": "Jun",
+      "value": 46
+    },
+    {
+      "row": "North",
+      "col": "Jul",
+      "value": 45
+    },
+    {
+      "row": "North",
+      "col": "Aug",
+      "value": 43
+    },
+    {
+      "row": "South",
+      "col": "Jan",
+      "value": 19
+    },
+    {
+      "row": "South",
+      "col": "Feb",
+      "value": 24
+    },
+    {
+      "row": "South",
+      "col": "Mar",
+      "value": 34
+    },
+    {
+      "row": "South",
+      "col": "Apr",
+      "value": 31
+    },
+    {
+      "row": "South",
+      "col": "May",
+      "value": 39
+    },
+    {
+      "row": "South",
+      "col": "Jun",
+      "value": 58
+    },
+    {
+      "row": "South",
+      "col": "Jul",
+      "value": 57
+    },
+    {
+      "row": "South",
+      "col": "Aug",
+      "value": 47
+    },
+    {
+      "row": "East",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "East",
+      "col": "Feb",
+      "value": 33
+    },
+    {
+      "row": "East",
+      "col": "Mar",
+      "value": 32
+    },
+    {
+      "row": "East",
+      "col": "Apr",
+      "value": 37
+    },
+    {
+      "row": "East",
+      "col": "May",
+      "value": 54
+    },
+    {
+      "row": "East",
+      "col": "Jun",
+      "value": 56
+    },
+    {
+      "row": "East",
+      "col": "Jul",
+      "value": 64
+    },
+    {
+      "row": "East",
+      "col": "Aug",
+      "value": 85
+    },
+    {
+      "row": "West",
+      "col": "Jan",
+      "value": 27
+    },
+    {
+      "row": "West",
+      "col": "Feb",
+      "value": 23
+    },
+    {
+      "row": "West",
+      "col": "Mar",
+      "value": 37
+    },
+    {
+      "row": "West",
+      "col": "Apr",
+      "value": 49
+    },
+    {
+      "row": "West",
+      "col": "May",
+      "value": 57
+    },
+    {
+      "row": "West",
+      "col": "Jun",
+      "value": 67
+    },
+    {
+      "row": "West",
+      "col": "Jul",
+      "value": 87
+    },
+    {
+      "row": "West",
+      "col": "Aug",
+      "value": 76
+    },
+    {
+      "row": "Northeast",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "Northeast",
+      "col": "Feb",
+      "value": 31
+    },
+    {
+      "row": "Northeast",
+      "col": "Mar",
+      "value": 27
+    },
+    {
+      "row": "Northeast",
+      "col": "Apr",
+      "value": 47
+    },
+    {
+      "row": "Northeast",
+      "col": "May",
+      "value": 59
+    },
+    {
+      "row": "Northeast",
+      "col": "Jun",
+      "value": 68
+    },
+    {
+      "row": "Northeast",
+      "col": "Jul",
+      "value": 91
+    },
+    {
+      "row": "Northeast",
+      "col": "Aug",
+      "value": 80
+    },
+    {
+      "row": "Southeast",
+      "col": "Jan",
+      "value": 25
+    },
+    {
+      "row": "Southeast",
+      "col": "Feb",
+      "value": 31
+    },
+    {
+      "row": "Southeast",
+      "col": "Mar",
+      "value": 28
+    },
+    {
+      "row": "Southeast",
+      "col": "Apr",
+      "value": 44
+    },
+    {
+      "row": "Southeast",
+      "col": "May",
+      "value": 61
+    },
+    {
+      "row": "Southeast",
+      "col": "Jun",
+      "value": 70
+    },
+    {
+      "row": "Southeast",
+      "col": "Jul",
+      "value": 67
+    },
+    {
+      "row": "Southeast",
+      "col": "Aug",
+      "value": 67
+    },
+    {
+      "row": "Northwest",
+      "col": "Jan",
+      "value": 23
+    },
+    {
+      "row": "Northwest",
+      "col": "Feb",
+      "value": 31
+    },
+    {
+      "row": "Northwest",
+      "col": "Mar",
+      "value": 30
+    },
+    {
+      "row": "Northwest",
+      "col": "Apr",
+      "value": 43
+    },
+    {
+      "row": "Northwest",
+      "col": "May",
+      "value": 48
+    },
+    {
+      "row": "Northwest",
+      "col": "Jun",
+      "value": 56
+    },
+    {
+      "row": "Northwest",
+      "col": "Jul",
+      "value": 64
+    },
+    {
+      "row": "Northwest",
+      "col": "Aug",
+      "value": 65
+    },
+    {
+      "row": "Southwest",
+      "col": "Jan",
+      "value": 20
+    },
+    {
+      "row": "Southwest",
+      "col": "Feb",
+      "value": 32
+    },
+    {
+      "row": "Southwest",
+      "col": "Mar",
+      "value": 34
+    },
+    {
+      "row": "Southwest",
+      "col": "Apr",
+      "value": 30
+    },
+    {
+      "row": "Southwest",
+      "col": "May",
+      "value": 36
+    },
+    {
+      "row": "Southwest",
+      "col": "Jun",
+      "value": 48
+    },
+    {
+      "row": "Southwest",
+      "col": "Jul",
+      "value": 58
+    },
+    {
+      "row": "Southwest",
+      "col": "Aug",
+      "value": 56
+    }
+  ]
+}

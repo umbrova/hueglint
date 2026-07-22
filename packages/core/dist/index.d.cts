@@ -26,6 +26,7 @@ interface HeatmapOptions {
     palette?: Palette;
     tooltipFormatter?: TooltipFormatter;
     onError?: (error: Error) => boolean | void;
+    minCellSize?: number;
 }
 
 declare class Heatmap {
