@@ -58,7 +58,7 @@ export default function AccessibilityProof() {
         <div className="min-w-[260px] flex-1">
           <p className="mb-2 text-center text-sm text-gray-700">Typical heatmap (not hueglint)</p>
           <div
-            className="grid gap-[3px] rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
+            className="grid gap-[3px] rounded-lg shadow-sm ring-1 ring-gray-100 p-2.5 transition-[filter] duration-300"
             style={{
               gridTemplateColumns: `repeat(${cols.length}, 1fr)`,
               gridTemplateRows: `repeat(${rows.length}, 1fr)`,
@@ -99,7 +99,7 @@ export default function AccessibilityProof() {
           </div>
 
             <div
-              className="overflow-y-auto rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
+              className="overflow-y-auto rounded-lg shadow-sm ring-1 ring-gray-100 p-2.5 transition-[filter] duration-300"
               style={{ height: '220px', filter: grayscale ? 'grayscale(1)' : 'none' }}
             >
             {showTable ? (

@@ -14,7 +14,7 @@ export default function Playground() {
   const active = datasets[datasetKey];
 
   return (
-    <div className="rounded-xl border border-gray-200 p-4">
+    <div className="rounded-xl shadow-sm ring-1 ring-gray-100 p-4">
       <div className="h-[320px]">
         <Heatmap
           data={active.data}
