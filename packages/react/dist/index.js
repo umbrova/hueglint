@@ -25,6 +25,9 @@ var Heatmap = forwardRef(function Heatmap2({ data, previousData, context, option
       chartRef.current?.setPalette(options.palette);
     }
   }, [options?.palette]);
+  useEffect(() => {
+    chartRef.current?.setMinCellSize(options?.minCellSize);
+  }, [options?.minCellSize]);
   useImperativeHandle(
     ref,
     () => ({

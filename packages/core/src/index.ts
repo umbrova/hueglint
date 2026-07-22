@@ -159,6 +159,17 @@ export class Heatmap {
     // takes effect on the next load().
   }
 
+  setMinCellSize(size?: number): void {
+    this.options = { ...this.options, minCellSize: size };
+    if (this.mode === 'normal') {
+      this.applyAggregationAndRender();
+    } else if (this.mode === 'diff') {
+      console.warn(
+        '[hueglint] setMinCellSize() has no effect in diff mode — diff mode does not currently support cell aggregation.'
+      );
+    }
+  }
+
   private applyAggregationAndRender(): void {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;

@@ -51,6 +51,9 @@ var Heatmap = (0, import_react.forwardRef)(function Heatmap2({ data, previousDat
       chartRef.current?.setPalette(options.palette);
     }
   }, [options?.palette]);
+  (0, import_react.useEffect)(() => {
+    chartRef.current?.setMinCellSize(options?.minCellSize);
+  }, [options?.minCellSize]);
   (0, import_react.useImperativeHandle)(
     ref,
     () => ({

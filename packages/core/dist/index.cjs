@@ -623,6 +623,16 @@ var _Heatmap = class _Heatmap {
       );
     }
   }
+  setMinCellSize(size) {
+    this.options = { ...this.options, minCellSize: size };
+    if (this.mode === "normal") {
+      this.applyAggregationAndRender();
+    } else if (this.mode === "diff") {
+      console.warn(
+        "[hueglint] setMinCellSize() has no effect in diff mode \u2014 diff mode does not currently support cell aggregation."
+      );
+    }
+  }
   applyAggregationAndRender() {
     const width = this.el.clientWidth || 400;
     const height = this.el.clientHeight || 300;
