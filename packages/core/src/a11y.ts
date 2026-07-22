@@ -9,10 +9,12 @@ export function buildAccessibleTable(
   data: HeatmapCell[],
   context: HeatmapContext,
   id: string
-): HTMLTableElement {
+): HTMLDivElement {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = VISUALLY_HIDDEN_STYLE;
+
   const table = document.createElement('table');
   table.id = id;
-  table.style.cssText = VISUALLY_HIDDEN_STYLE;
 
   const caption = document.createElement('caption');
   caption.textContent =
@@ -45,17 +47,20 @@ export function buildAccessibleTable(
   }
   table.appendChild(tbody);
 
-  return table;
+  wrapper.appendChild(table);
+  return wrapper;
 }
 
 export function buildDiffAccessibleTable(
   diffs: DiffResult[],
   context: HeatmapContext,
   id: string
-): HTMLTableElement {
+): HTMLDivElement {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = VISUALLY_HIDDEN_STYLE;
+
   const table = document.createElement('table');
   table.id = id;
-  table.style.cssText = VISUALLY_HIDDEN_STYLE;
 
   const caption = document.createElement('caption');
   caption.textContent = context.description ?? 'Comparison between two datasets';
@@ -86,7 +91,9 @@ export function buildDiffAccessibleTable(
     tbody.appendChild(tr);
   }
   table.appendChild(tbody);
-  return table;
+
+  wrapper.appendChild(table);
+  return wrapper;
 }
 
 interface SummaryStats {
