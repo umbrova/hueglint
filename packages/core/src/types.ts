@@ -1,7 +1,6 @@
 import { Palette } from './palette';
 import { TooltipFormatter } from './tooltip';
 
-
 export interface HeatmapCell {
   row: string | number;
   col: string | number;
@@ -16,9 +15,12 @@ export interface HeatmapContext {
   description?: string;
 }
 
+export type SummaryFormatter = (data: HeatmapCell[], context: HeatmapContext) => string;
+
 export interface HeatmapOptions {
   palette?: Palette;
   tooltipFormatter?: TooltipFormatter;
   onError?: (error: Error) => boolean | void;
   minCellSize?: number;
+  summaryFormatter?: string | SummaryFormatter;
 }

@@ -14,16 +14,15 @@ import '../styles/global.css';
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
   </head>
   <body class="font-sans text-gray-900 bg-white">
     <header class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
       <div class="flex items-center gap-2.5">
         <img src="/hueglint-icon.svg" alt="" class="h-9 w-9" />
-        <img src="/hueglint-word.svg" alt="hueglint" class="h-6" />
+        <img src="/hueglint-word.svg" alt="hueglint" class="h-7" />
       </div>
       <div class="flex items-center gap-4">
-        <a href="/docs/getting-started/installation/" class="text-sm text-gray-600 hover:text-gray-900">Docs</a>
+        <a href="/docs/" class="text-sm text-gray-600 hover:text-gray-900">Docs</a>
         <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-4 py-1.5 text-sm text-white hover:bg-gray-800 transition">Get started</a>
       </div>
     </header>
@@ -33,11 +32,11 @@ import '../styles/global.css';
       <p class="text-gray-600 max-w-md mb-6">
         CVD-safe by default, honest tooltips, native diff mode.
       </p>
-      <div class="flex gap-3 mb-10">
+      <div class="flex gap-3 mb-4">
         <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">Get started</a>
         <a href="https://github.com" class="rounded border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-800 hover:bg-gray-50 transition">View on GitHub</a>
       </div>
-      <div class="mt-4 inline-flex items-center gap-3 rounded bg-gray-900 px-4 py-2 text-sm text-gray-100 font-mono">
+      <div class="mb-10 inline-flex items-center gap-3 rounded bg-gray-900 px-4 py-2 text-sm text-gray-100 font-mono">
         <span>npm install @hueglint/core</span>
         <button
           onclick="navigator.clipboard.writeText('npm install @hueglint/core')"
@@ -56,6 +55,10 @@ import '../styles/global.css';
 
       <AccessibilityProof client:visible />
     </main>
+
+    <footer class="mt-16 border-t border-gray-100 py-6 text-center text-sm text-gray-500">
+      <p>hueglint · MIT licensed · <a href="https://github.com" class="hover:text-gray-800">GitHub</a> · <a href="/docs/getting-started/installation/" class="hover:text-gray-800">Docs</a></p>
+    </footer>
 
     <style>
       .wordmark-hue {
