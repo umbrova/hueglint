@@ -14,8 +14,8 @@ export default function Playground() {
   const active = datasets[datasetKey];
 
   return (
-    <div className="flex flex-wrap items-start gap-6">
-      <div className="h-[320px] flex-1 min-w-[300px] rounded-lg border border-gray-200 p-4">
+    <div className="rounded-xl border border-gray-200 p-4">
+      <div className="h-[320px]">
         <Heatmap
           data={active.data}
           previousData={diffMode ? active.previousData : undefined}
@@ -24,11 +24,9 @@ export default function Playground() {
         />
       </div>
 
-      <div className="min-w-[180px] space-y-4">
-        <div>
-          <label htmlFor="dataset-select" className="mb-1 block text-sm text-gray-600">
-            Sample data
-          </label>
+      <div className="mt-4 flex flex-wrap items-center gap-5 text-sm text-gray-600">
+        <div className="flex items-center gap-2">
+          <label htmlFor="dataset-select">Sample data</label>
           <select
             id="dataset-select"
             value={datasetKey}
@@ -43,10 +41,8 @@ export default function Playground() {
           </select>
         </div>
 
-        <div>
-          <label htmlFor="palette-select" className="mb-1 block text-sm text-gray-600">
-            Palette
-          </label>
+        <div className="flex items-center gap-2">
+          <label htmlFor="palette-select">Palette</label>
           <select
             id="palette-select"
             value={palette}
@@ -62,7 +58,7 @@ export default function Playground() {
           </select>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-gray-700">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={diffMode}
@@ -72,14 +68,14 @@ export default function Playground() {
           Compare to previous period
         </label>
 
-        <label className="flex items-center gap-2 text-sm text-gray-700">
+        <label className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={showEveryCell}
             onChange={(e) => setShowEveryCell(e.target.checked)}
             className="accent-brand-accent"
           />
-          Show every cell (disable touch-target protection)
+          Show every cell
         </label>
       </div>
     </div>
