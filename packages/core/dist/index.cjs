@@ -444,12 +444,12 @@ function buildErrorState(message) {
 
 // src/aggregate.ts
 var MIN_TOUCH_SIZE = 44;
-function computeAggregationFactor(width, height, rowCount, colCount) {
+function computeAggregationFactor(width, height, rowCount, colCount, minCellSize = MIN_TOUCH_SIZE) {
   if (rowCount === 0 || colCount === 0) return 1;
   const naiveCellWidth = width / colCount;
   const naiveCellHeight = height / rowCount;
-  const factorW = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellWidth));
-  const factorH = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellHeight));
+  const factorW = Math.max(1, Math.ceil(minCellSize / naiveCellWidth));
+  const factorH = Math.max(1, Math.ceil(minCellSize / naiveCellHeight));
   return Math.max(factorW, factorH);
 }
 function chunk(arr, size) {
@@ -628,7 +628,18 @@ var _Heatmap = class _Heatmap {
     const height = this.el.clientHeight || 300;
     const rows = Array.from(new Set(this.rawData.map((d) => d.row)));
     const cols = Array.from(new Set(this.rawData.map((d) => d.col)));
-    const factor = computeAggregationFactor(width, height, rows.length, cols.length);
+    const rawMin = this.options.minCellSize;
+    let minCellSize = MIN_TOUCH_SIZE;
+    if (rawMin !== void 0) {
+      if (typeof rawMin === "number" && rawMin > 0) {
+        minCellSize = rawMin;
+      } else {
+        console.warn(
+          `[hueglint] Invalid minCellSize "${rawMin}", falling back to default (${MIN_TOUCH_SIZE}px).`
+        );
+      }
+    }
+    const factor = computeAggregationFactor(width, height, rows.length, cols.length, minCellSize);
     this.data = aggregateData(this.rawData, rows, cols, factor);
     this.render();
   }

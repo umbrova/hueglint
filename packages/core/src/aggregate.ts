@@ -1,7 +1,5 @@
 import { HeatmapCell } from './types';
 
-export const MIN_TOUCH_SIZE = 44;
-
 interface AggregateBucket {
   sum: number;
   count: number;
@@ -9,19 +7,20 @@ interface AggregateBucket {
   colLabel: string;
 }
 
+export const MIN_TOUCH_SIZE = 44;
+
 export function computeAggregationFactor(
   width: number,
   height: number,
   rowCount: number,
-  colCount: number
+  colCount: number,
+  minCellSize: number = MIN_TOUCH_SIZE
 ): number {
   if (rowCount === 0 || colCount === 0) return 1;
   const naiveCellWidth = width / colCount;
   const naiveCellHeight = height / rowCount;
-  const factorW = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellWidth));
-  const factorH = Math.max(1, Math.ceil(MIN_TOUCH_SIZE / naiveCellHeight));
-  // A single uniform factor keeps aggregated blocks square rather than
-  // stretched rectangles — simpler to reason about and to label.
+  const factorW = Math.max(1, Math.ceil(minCellSize / naiveCellWidth));
+  const factorH = Math.max(1, Math.ceil(minCellSize / naiveCellHeight));
   return Math.max(factorW, factorH);
 }
 

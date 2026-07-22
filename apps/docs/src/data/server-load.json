@@ -1,0 +1,712 @@
+{
+  "label": "Server load",
+  "context": {
+    "rowLabel": "Day",
+    "colLabel": "Hour",
+    "valueLabel": "Requests"
+  },
+  "data": [
+    {
+      "row": "Mon",
+      "col": "8am",
+      "value": 34
+    },
+    {
+      "row": "Mon",
+      "col": "9am",
+      "value": 41
+    },
+    {
+      "row": "Mon",
+      "col": "10am",
+      "value": 57
+    },
+    {
+      "row": "Mon",
+      "col": "11am",
+      "value": 69
+    },
+    {
+      "row": "Mon",
+      "col": "12pm",
+      "value": 86
+    },
+    {
+      "row": "Mon",
+      "col": "1pm",
+      "value": 90
+    },
+    {
+      "row": "Mon",
+      "col": "2pm",
+      "value": 88
+    },
+    {
+      "row": "Mon",
+      "col": "3pm",
+      "value": 68
+    },
+    {
+      "row": "Mon",
+      "col": "4pm",
+      "value": 58
+    },
+    {
+      "row": "Mon",
+      "col": "5pm",
+      "value": 41
+    },
+    {
+      "row": "Tue",
+      "col": "8am",
+      "value": 35
+    },
+    {
+      "row": "Tue",
+      "col": "9am",
+      "value": 50
+    },
+    {
+      "row": "Tue",
+      "col": "10am",
+      "value": 62
+    },
+    {
+      "row": "Tue",
+      "col": "11am",
+      "value": 79
+    },
+    {
+      "row": "Tue",
+      "col": "12pm",
+      "value": 98
+    },
+    {
+      "row": "Tue",
+      "col": "1pm",
+      "value": 101
+    },
+    {
+      "row": "Tue",
+      "col": "2pm",
+      "value": 91
+    },
+    {
+      "row": "Tue",
+      "col": "3pm",
+      "value": 84
+    },
+    {
+      "row": "Tue",
+      "col": "4pm",
+      "value": 70
+    },
+    {
+      "row": "Tue",
+      "col": "5pm",
+      "value": 46
+    },
+    {
+      "row": "Wed",
+      "col": "8am",
+      "value": 39
+    },
+    {
+      "row": "Wed",
+      "col": "9am",
+      "value": 54
+    },
+    {
+      "row": "Wed",
+      "col": "10am",
+      "value": 68
+    },
+    {
+      "row": "Wed",
+      "col": "11am",
+      "value": 82
+    },
+    {
+      "row": "Wed",
+      "col": "12pm",
+      "value": 107
+    },
+    {
+      "row": "Wed",
+      "col": "1pm",
+      "value": 102
+    },
+    {
+      "row": "Wed",
+      "col": "2pm",
+      "value": 94
+    },
+    {
+      "row": "Wed",
+      "col": "3pm",
+      "value": 81
+    },
+    {
+      "row": "Wed",
+      "col": "4pm",
+      "value": 73
+    },
+    {
+      "row": "Wed",
+      "col": "5pm",
+      "value": 53
+    },
+    {
+      "row": "Thu",
+      "col": "8am",
+      "value": 38
+    },
+    {
+      "row": "Thu",
+      "col": "9am",
+      "value": 52
+    },
+    {
+      "row": "Thu",
+      "col": "10am",
+      "value": 67
+    },
+    {
+      "row": "Thu",
+      "col": "11am",
+      "value": 89
+    },
+    {
+      "row": "Thu",
+      "col": "12pm",
+      "value": 94
+    },
+    {
+      "row": "Thu",
+      "col": "1pm",
+      "value": 101
+    },
+    {
+      "row": "Thu",
+      "col": "2pm",
+      "value": 101
+    },
+    {
+      "row": "Thu",
+      "col": "3pm",
+      "value": 85
+    },
+    {
+      "row": "Thu",
+      "col": "4pm",
+      "value": 70
+    },
+    {
+      "row": "Thu",
+      "col": "5pm",
+      "value": 51
+    },
+    {
+      "row": "Fri",
+      "col": "8am",
+      "value": 34
+    },
+    {
+      "row": "Fri",
+      "col": "9am",
+      "value": 41
+    },
+    {
+      "row": "Fri",
+      "col": "10am",
+      "value": 56
+    },
+    {
+      "row": "Fri",
+      "col": "11am",
+      "value": 70
+    },
+    {
+      "row": "Fri",
+      "col": "12pm",
+      "value": 78
+    },
+    {
+      "row": "Fri",
+      "col": "1pm",
+      "value": 83
+    },
+    {
+      "row": "Fri",
+      "col": "2pm",
+      "value": 78
+    },
+    {
+      "row": "Fri",
+      "col": "3pm",
+      "value": 70
+    },
+    {
+      "row": "Fri",
+      "col": "4pm",
+      "value": 60
+    },
+    {
+      "row": "Fri",
+      "col": "5pm",
+      "value": 44
+    },
+    {
+      "row": "Sat",
+      "col": "8am",
+      "value": 28
+    },
+    {
+      "row": "Sat",
+      "col": "9am",
+      "value": 36
+    },
+    {
+      "row": "Sat",
+      "col": "10am",
+      "value": 46
+    },
+    {
+      "row": "Sat",
+      "col": "11am",
+      "value": 63
+    },
+    {
+      "row": "Sat",
+      "col": "12pm",
+      "value": 68
+    },
+    {
+      "row": "Sat",
+      "col": "1pm",
+      "value": 71
+    },
+    {
+      "row": "Sat",
+      "col": "2pm",
+      "value": 63
+    },
+    {
+      "row": "Sat",
+      "col": "3pm",
+      "value": 61
+    },
+    {
+      "row": "Sat",
+      "col": "4pm",
+      "value": 46
+    },
+    {
+      "row": "Sat",
+      "col": "5pm",
+      "value": 37
+    },
+    {
+      "row": "Sun",
+      "col": "8am",
+      "value": 26
+    },
+    {
+      "row": "Sun",
+      "col": "9am",
+      "value": 31
+    },
+    {
+      "row": "Sun",
+      "col": "10am",
+      "value": 38
+    },
+    {
+      "row": "Sun",
+      "col": "11am",
+      "value": 46
+    },
+    {
+      "row": "Sun",
+      "col": "12pm",
+      "value": 53
+    },
+    {
+      "row": "Sun",
+      "col": "1pm",
+      "value": 54
+    },
+    {
+      "row": "Sun",
+      "col": "2pm",
+      "value": 48
+    },
+    {
+      "row": "Sun",
+      "col": "3pm",
+      "value": 41
+    },
+    {
+      "row": "Sun",
+      "col": "4pm",
+      "value": 36
+    },
+    {
+      "row": "Sun",
+      "col": "5pm",
+      "value": 29
+    }
+  ],
+  "previousData": [
+    {
+      "row": "Mon",
+      "col": "8am",
+      "value": 34
+    },
+    {
+      "row": "Mon",
+      "col": "9am",
+      "value": 44
+    },
+    {
+      "row": "Mon",
+      "col": "10am",
+      "value": 58
+    },
+    {
+      "row": "Mon",
+      "col": "11am",
+      "value": 77
+    },
+    {
+      "row": "Mon",
+      "col": "12pm",
+      "value": 76
+    },
+    {
+      "row": "Mon",
+      "col": "1pm",
+      "value": 87
+    },
+    {
+      "row": "Mon",
+      "col": "2pm",
+      "value": 97
+    },
+    {
+      "row": "Mon",
+      "col": "3pm",
+      "value": 62
+    },
+    {
+      "row": "Mon",
+      "col": "4pm",
+      "value": 67
+    },
+    {
+      "row": "Mon",
+      "col": "5pm",
+      "value": 33
+    },
+    {
+      "row": "Tue",
+      "col": "8am",
+      "value": 32
+    },
+    {
+      "row": "Tue",
+      "col": "9am",
+      "value": 54
+    },
+    {
+      "row": "Tue",
+      "col": "10am",
+      "value": 53
+    },
+    {
+      "row": "Tue",
+      "col": "11am",
+      "value": 91
+    },
+    {
+      "row": "Tue",
+      "col": "12pm",
+      "value": 120
+    },
+    {
+      "row": "Tue",
+      "col": "1pm",
+      "value": 90
+    },
+    {
+      "row": "Tue",
+      "col": "2pm",
+      "value": 97
+    },
+    {
+      "row": "Tue",
+      "col": "3pm",
+      "value": 80
+    },
+    {
+      "row": "Tue",
+      "col": "4pm",
+      "value": 61
+    },
+    {
+      "row": "Tue",
+      "col": "5pm",
+      "value": 49
+    },
+    {
+      "row": "Wed",
+      "col": "8am",
+      "value": 41
+    },
+    {
+      "row": "Wed",
+      "col": "9am",
+      "value": 51
+    },
+    {
+      "row": "Wed",
+      "col": "10am",
+      "value": 82
+    },
+    {
+      "row": "Wed",
+      "col": "11am",
+      "value": 79
+    },
+    {
+      "row": "Wed",
+      "col": "12pm",
+      "value": 103
+    },
+    {
+      "row": "Wed",
+      "col": "1pm",
+      "value": 111
+    },
+    {
+      "row": "Wed",
+      "col": "2pm",
+      "value": 102
+    },
+    {
+      "row": "Wed",
+      "col": "3pm",
+      "value": 66
+    },
+    {
+      "row": "Wed",
+      "col": "4pm",
+      "value": 68
+    },
+    {
+      "row": "Wed",
+      "col": "5pm",
+      "value": 63
+    },
+    {
+      "row": "Thu",
+      "col": "8am",
+      "value": 33
+    },
+    {
+      "row": "Thu",
+      "col": "9am",
+      "value": 63
+    },
+    {
+      "row": "Thu",
+      "col": "10am",
+      "value": 59
+    },
+    {
+      "row": "Thu",
+      "col": "11am",
+      "value": 82
+    },
+    {
+      "row": "Thu",
+      "col": "12pm",
+      "value": 94
+    },
+    {
+      "row": "Thu",
+      "col": "1pm",
+      "value": 101
+    },
+    {
+      "row": "Thu",
+      "col": "2pm",
+      "value": 101
+    },
+    {
+      "row": "Thu",
+      "col": "3pm",
+      "value": 78
+    },
+    {
+      "row": "Thu",
+      "col": "4pm",
+      "value": 74
+    },
+    {
+      "row": "Thu",
+      "col": "5pm",
+      "value": 45
+    },
+    {
+      "row": "Fri",
+      "col": "8am",
+      "value": 40
+    },
+    {
+      "row": "Fri",
+      "col": "9am",
+      "value": 40
+    },
+    {
+      "row": "Fri",
+      "col": "10am",
+      "value": 47
+    },
+    {
+      "row": "Fri",
+      "col": "11am",
+      "value": 68
+    },
+    {
+      "row": "Fri",
+      "col": "12pm",
+      "value": 68
+    },
+    {
+      "row": "Fri",
+      "col": "1pm",
+      "value": 74
+    },
+    {
+      "row": "Fri",
+      "col": "2pm",
+      "value": 77
+    },
+    {
+      "row": "Fri",
+      "col": "3pm",
+      "value": 71
+    },
+    {
+      "row": "Fri",
+      "col": "4pm",
+      "value": 57
+    },
+    {
+      "row": "Fri",
+      "col": "5pm",
+      "value": 37
+    },
+    {
+      "row": "Sat",
+      "col": "8am",
+      "value": 32
+    },
+    {
+      "row": "Sat",
+      "col": "9am",
+      "value": 38
+    },
+    {
+      "row": "Sat",
+      "col": "10am",
+      "value": 47
+    },
+    {
+      "row": "Sat",
+      "col": "11am",
+      "value": 55
+    },
+    {
+      "row": "Sat",
+      "col": "12pm",
+      "value": 66
+    },
+    {
+      "row": "Sat",
+      "col": "1pm",
+      "value": 79
+    },
+    {
+      "row": "Sat",
+      "col": "2pm",
+      "value": 66
+    },
+    {
+      "row": "Sat",
+      "col": "3pm",
+      "value": 57
+    },
+    {
+      "row": "Sat",
+      "col": "4pm",
+      "value": 48
+    },
+    {
+      "row": "Sat",
+      "col": "5pm",
+      "value": 33
+    },
+    {
+      "row": "Sun",
+      "col": "8am",
+      "value": 24
+    },
+    {
+      "row": "Sun",
+      "col": "9am",
+      "value": 31
+    },
+    {
+      "row": "Sun",
+      "col": "10am",
+      "value": 40
+    },
+    {
+      "row": "Sun",
+      "col": "11am",
+      "value": 42
+    },
+    {
+      "row": "Sun",
+      "col": "12pm",
+      "value": 65
+    },
+    {
+      "row": "Sun",
+      "col": "1pm",
+      "value": 67
+    },
+    {
+      "row": "Sun",
+      "col": "2pm",
+      "value": 49
+    },
+    {
+      "row": "Sun",
+      "col": "3pm",
+      "value": 38
+    },
+    {
+      "row": "Sun",
+      "col": "4pm",
+      "value": 32
+    },
+    {
+      "row": "Sun",
+      "col": "5pm",
+      "value": 31
+    }
+  ]
+}

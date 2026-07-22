@@ -8,7 +8,7 @@ import { setupRovingTabindex, GridCellRef } from './keyboard';
 import { TooltipController, attachTooltipEvents, attachDiffTooltipEvents } from './tooltip';
 import { computeDiff, normalizeDiffs, DiffResult } from './diff';
 import { buildLoadingState, buildEmptyState, buildErrorState } from './states';
-import { computeAggregationFactor, aggregateData } from './aggregate';
+import { computeAggregationFactor, aggregateData, MIN_TOUCH_SIZE  } from './aggregate';
 
 export type { HeatmapCell, HeatmapContext, HeatmapOptions } from './types';
 export type { Palette } from './palette';
@@ -164,7 +164,20 @@ export class Heatmap {
     const height = this.el.clientHeight || 300;
     const rows = Array.from(new Set(this.rawData.map((d) => d.row)));
     const cols = Array.from(new Set(this.rawData.map((d) => d.col)));
-    const factor = computeAggregationFactor(width, height, rows.length, cols.length);
+
+    const rawMin = this.options.minCellSize;
+    let minCellSize = MIN_TOUCH_SIZE;
+    if (rawMin !== undefined) {
+      if (typeof rawMin === 'number' && rawMin > 0) {
+        minCellSize = rawMin;
+      } else {
+        console.warn(
+          `[hueglint] Invalid minCellSize "${rawMin}", falling back to default (${MIN_TOUCH_SIZE}px).`
+        );
+      }
+    }
+
+    const factor = computeAggregationFactor(width, height, rows.length, cols.length, minCellSize);
     this.data = aggregateData(this.rawData, rows, cols, factor);
     this.render();
   }
