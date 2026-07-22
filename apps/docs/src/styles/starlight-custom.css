@@ -9,3 +9,10 @@
 .sl-container {
   border-inline: none;
 }
+
+html[data-theme='dark'] .word-light-bg {
+  display: none;
+}
+html[data-theme='light'] .word-dark-bg {
+  display: none;
+}
