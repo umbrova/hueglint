@@ -5,22 +5,23 @@
 
 [1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/Development/projects/hueglint/packages/core[39m
 
- [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 457[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mmakes exactly one cell tabbable at a time (roving tabindex) [33m324[2mms[22m[39m
- [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 481[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders diff cells only for matching (row, col) pairs, warning on mismatches [33m334[2mms[22m[39m
- [32m✓[39m test/responsive.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 574[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap responsive rendering[2m > [22mrenders fewer cells than raw data when the container is too small for one-to-one rendering [33m398[2mms[22m[39m
- [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 591[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mshows a Loading state immediately after construction, before load() is called [33m319[2mms[22m[39m
- [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 626[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders an accessible table alongside the visual chart [33m358[2mms[22m[39m
- [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 688[2mms[22m[39m
- [32m✓[39m test/render.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 771[2mms[22m[39m
-   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders one rect per cell [33m329[2mms[22m[39m
+ [32m✓[39m test/keyboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mmakes exactly one cell tabbable at a time (roving tabindex) [33m331[2mms[22m[39m
+ [32m✓[39m test/responsive.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 453[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap responsive rendering[2m > [22mrenders fewer cells than raw data when the container is too small for one-to-one rendering [33m304[2mms[22m[39m
+ [32m✓[39m test/diff.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 575[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders diff cells only for matching (row, col) pairs, warning on mismatches [33m397[2mms[22m[39m
+ [32m✓[39m test/states.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 623[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mshows a Loading state immediately after construction, before load() is called [33m410[2mms[22m[39m
+ [32m✓[39m test/accessibility.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders an accessible table alongside the visual chart [33m442[2mms[22m[39m
+ [32m✓[39m test/tooltip.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 719[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mshows tooltip content on hover and hides on mouseleave [33m409[2mms[22m[39m
+ [32m✓[39m test/render.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 814[2mms[22m[39m
+   [33m[2m✓[22m[39m Heatmap[2m > [22mrenders one rect per cell [33m397[2mms[22m[39m
 
 [2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
 [2m      Tests [22m [1m[32m47 passed[39m[22m[90m (47)[39m
-[2m   Start at [22m 10:59:06
-[2m   Duration [22m 12.08s[2m (transform 2.37s, setup 1.38s, collect 30.89s, tests 4.19s, environment 40.48s, prepare 2.35s)[22m
+[2m   Start at [22m 11:22:27
+[2m   Duration [22m 53.13s[2m (transform 825ms, setup 756ms, collect 10.35s, tests 4.31s, environment 330.41s, prepare 17.05s)[22m
 
