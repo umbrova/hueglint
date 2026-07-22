@@ -2,4 +2,10 @@
   --sl-font: 'Roboto', system-ui, sans-serif;
   --sl-color-accent: #534AB7;
   --sl-color-accent-high: #3C3489;
+  --sl-content-width: 55rem;
+  --sl-sidebar-width: 17rem;
+}
+
+.sl-container {
+  border-inline: none;
 }

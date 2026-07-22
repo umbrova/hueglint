@@ -8,6 +8,9 @@ export default defineConfig({
     starlight({
       title: 'hueglint',
       description: 'Clarity, not just color.',
+      components: {
+        SiteTitle: './src/components/StarlightSiteTitle.astro',
+      },
       customCss: ['./src/styles/starlight-custom.css'],
       sidebar: [
         { label: 'Getting started', autogenerate: { directory: 'docs/getting-started' } },
