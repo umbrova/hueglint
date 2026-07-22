@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Roboto", system-ui, sans-serif;
+  --color-brand-accent: #534AB7;
+}
