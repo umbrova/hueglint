@@ -32,7 +32,7 @@ export class Heatmap {
   private readonly id = `hueglint-${Heatmap.instanceCount++}`;
 
   private svg: SVGSVGElement;
-  private table: HTMLTableElement | null = null;
+  private table: HTMLDivElement | null = null;
   private summaryEl: HTMLParagraphElement | null = null;
   private tooltip: TooltipController;
   private stateEl: HTMLElement | null = null;
