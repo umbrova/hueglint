@@ -1,9 +1,6 @@
-import { HeatmapCell, HeatmapContext } from './types';
+import { HeatmapCell, HeatmapContext, SummaryFormatter } from './types';
 import { DiffResult } from './diff';
 
-// Standard "visually hidden but still accessible" pattern — content is
-// removed from the visual layout entirely, but stays in the accessibility
-// tree, so screen readers reach it while sighted users never see it.
 const VISUALLY_HIDDEN_STYLE =
   'position:absolute;width:1px;height:1px;padding:0;margin:-1px;' +
   'overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
@@ -90,4 +87,52 @@ export function buildDiffAccessibleTable(
   }
   table.appendChild(tbody);
   return table;
+}
+
+interface SummaryStats {
+  maxValue: number; maxRow: string | number; maxCol: string | number;
+  minValue: number; minRow: string | number; minCol: string | number;
+  rowLabel: string; colLabel: string; valueLabel: string;
+}
+
+function computeStats(data: HeatmapCell[], context: HeatmapContext): SummaryStats {
+  let max = data[0];
+  let min = data[0];
+  for (const c of data) {
+    if (c.value > max.value) max = c;
+    if (c.value < min.value) min = c;
+  }
+  return {
+    maxValue: max.value, maxRow: max.row, maxCol: max.col,
+    minValue: min.value, minRow: min.row, minCol: min.col,
+    rowLabel: context.rowLabel ?? 'Row',
+    colLabel: context.colLabel ?? 'Column',
+    valueLabel: context.valueLabel ?? 'Value',
+  };
+}
+
+const DEFAULT_SUMMARY_TEMPLATE =
+  '{valueLabel} by {rowLabel} and {colLabel}. Highest: {maxValue} at {rowLabel} {maxRow}, {colLabel} {maxCol}. Lowest: {minValue} at {rowLabel} {minRow}, {colLabel} {minCol}.';
+
+function applyTemplate(template: string, s: SummaryStats): string {
+  return template
+    .replace(/{maxValue}/g, String(s.maxValue)).replace(/{maxRow}/g, String(s.maxRow)).replace(/{maxCol}/g, String(s.maxCol))
+    .replace(/{minValue}/g, String(s.minValue)).replace(/{minRow}/g, String(s.minRow)).replace(/{minCol}/g, String(s.minCol))
+    .replace(/{rowLabel}/g, s.rowLabel).replace(/{colLabel}/g, s.colLabel).replace(/{valueLabel}/g, s.valueLabel);
+}
+
+export function buildSummaryElement(
+  data: HeatmapCell[],
+  context: HeatmapContext,
+  summary: string | SummaryFormatter | undefined
+): HTMLParagraphElement {
+  const p = document.createElement('p');
+  p.style.cssText = VISUALLY_HIDDEN_STYLE;
+  if (data.length === 0) return p;
+  if (typeof summary === 'function') {
+    p.textContent = summary(data, context);
+  } else {
+    p.textContent = applyTemplate(summary ?? DEFAULT_SUMMARY_TEMPLATE, computeStats(data, context));
+  }
+  return p;
 }

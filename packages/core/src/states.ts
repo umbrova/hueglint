@@ -10,12 +10,12 @@ export function buildLoadingState(): HTMLDivElement {
       `animation-delay:${(i % 4) * 0.1}s;`;
     el.appendChild(cell);
   }
-  // Injected once per document (checked via id), not once per chart
-  // instance — otherwise every chart on a page duplicates the same rule.
   if (!document.getElementById('hueglint-pulse-keyframes')) {
     const style = document.createElement('style');
     style.id = 'hueglint-pulse-keyframes';
-    style.textContent = '@keyframes hueglint-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }';
+    style.textContent =
+      '@keyframes hueglint-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }' +
+      '@media (prefers-reduced-motion: reduce) { [data-hueglint-state="loading"] div { animation: none !important; opacity: .6; } }';
     document.head.appendChild(style);
   }
   return el;

@@ -3,12 +3,12 @@ import { validateData } from './validate';
 import { computeLayout } from './layout';
 import { isValidPalette, getColorScale, getDivergingColorScale, Palette } from './palette';
 import { normalizeValues } from './normalize';
-import { buildAccessibleTable, buildDiffAccessibleTable } from './a11y';
+import { buildAccessibleTable, buildDiffAccessibleTable, buildSummaryElement } from './a11y';
 import { setupRovingTabindex, GridCellRef } from './keyboard';
 import { TooltipController, attachTooltipEvents, attachDiffTooltipEvents } from './tooltip';
 import { computeDiff, normalizeDiffs, DiffResult } from './diff';
 import { buildLoadingState, buildEmptyState, buildErrorState } from './states';
-import { computeAggregationFactor, aggregateData, MIN_TOUCH_SIZE  } from './aggregate';
+import { computeAggregationFactor, aggregateData, MIN_TOUCH_SIZE } from './aggregate';
 
 export type { HeatmapCell, HeatmapContext, HeatmapOptions } from './types';
 export type { Palette } from './palette';
@@ -16,12 +16,24 @@ export type { DiffResult } from './diff';
 
 type Mode = 'normal' | 'diff' | null;
 
+function applyContrastAttributes(rect: SVGRectElement): void {
+  if (window.matchMedia('(forced-colors: active)').matches) {
+    rect.style.setProperty('forced-color-adjust', 'none');
+    rect.setAttribute('stroke', 'CanvasText');
+    rect.setAttribute('stroke-width', '0.5');
+  } else if (window.matchMedia('(prefers-contrast: more)').matches) {
+    rect.setAttribute('stroke', 'rgba(0,0,0,0.4)');
+    rect.setAttribute('stroke-width', '1');
+  }
+}
+
 export class Heatmap {
   private static instanceCount = 0;
   private readonly id = `hueglint-${Heatmap.instanceCount++}`;
 
   private svg: SVGSVGElement;
   private table: HTMLTableElement | null = null;
+  private summaryEl: HTMLParagraphElement | null = null;
   private tooltip: TooltipController;
   private stateEl: HTMLElement | null = null;
   private resizeObserver: ResizeObserver;
@@ -52,6 +64,7 @@ export class Heatmap {
     this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.svg.setAttribute('width', '100%');
     this.svg.setAttribute('height', '100%');
+    this.svg.setAttribute('data-hueglint-root', '');
     this.el.appendChild(this.svg);
 
     this.showState(buildLoadingState());
@@ -155,8 +168,6 @@ export class Heatmap {
         '[hueglint] setPalette() has no effect in diff mode — diff mode always uses the diverging palette.'
       );
     }
-    // mode === null (nothing loaded yet): value is stored silently and
-    // takes effect on the next load().
   }
 
   setMinCellSize(size?: number): void {
@@ -239,6 +250,7 @@ export class Heatmap {
         'aria-label',
         `${this.context.rowLabel ?? 'Row'} ${cell.row}, ${this.context.colLabel ?? 'Column'} ${cell.col}: ${cell.value}`
       );
+      applyContrastAttributes(rect);
       this.svg.appendChild(rect);
 
       gridCells.push({
@@ -256,6 +268,11 @@ export class Heatmap {
       this.context,
       this.options.tooltipFormatter
     );
+
+    const summaryEl = buildSummaryElement(this.data, this.context, this.options.summaryFormatter);
+    if (this.summaryEl) this.el.removeChild(this.summaryEl);
+    this.summaryEl = summaryEl;
+    this.el.appendChild(this.summaryEl);
 
     if (this.table) this.el.removeChild(this.table);
     this.table = buildAccessibleTable(this.data, this.context, `${this.id}-table`);
@@ -290,6 +307,7 @@ export class Heatmap {
         `${this.context.rowLabel ?? 'Row'} ${d.row}, ${this.context.colLabel ?? 'Column'} ${d.col}: ` +
           `changed from ${d.previousValue} to ${d.currentValue} (${sign}${d.delta})`
       );
+      applyContrastAttributes(rect);
       this.svg.appendChild(rect);
       gridCells.push({
         el: rect,
@@ -313,6 +331,7 @@ export class Heatmap {
     this.cleanupTooltip?.();
     this.tooltip.destroy();
     this.stateEl?.remove();
+    this.summaryEl?.remove();
     this.svg.remove();
     this.table?.remove();
   }
