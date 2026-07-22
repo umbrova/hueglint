@@ -79,56 +79,58 @@ export default function AccessibilityProof() {
               })
             )}
           </div>
-          <p className="mt-1.5 text-center text-xs text-gray-500">Values collapse into each other</p>
+          <p className="mt-1.5 text-center text-xs text-gray-500">
+            Values collapse into each other · <span className="italic">no accessible alternative</span>
+          </p>
         </div>
 
         <div className="min-w-[260px] flex-1">
-          <p className="mb-2 text-center text-sm text-gray-700">hueglint (viridis, CVD-safe)</p>
-          <div
-            className="h-[220px] rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
-            style={{ filter: grayscale ? 'grayscale(1)' : 'none' }}
-          >
-            <Heatmap data={compareData} options={{ palette: 'viridis' }} />
+          <div className="mb-2 flex items-center justify-center gap-3">
+            <p className="text-sm text-gray-700">hueglint (viridis, CVD-safe)</p>
+            <label className="flex items-center gap-1 text-xs text-gray-500">
+              <input
+                type="checkbox"
+                checked={showTable}
+                onChange={(e) => setShowTable(e.target.checked)}
+                className="accent-brand-accent"
+              />
+              Table view
+            </label>
           </div>
-          <p className="mt-1.5 text-center text-xs text-gray-500">Still readable by lightness alone</p>
+
+            <div
+              className="overflow-y-auto rounded-lg border border-gray-200 p-2.5 transition-[filter] duration-300"
+              style={{ height: '220px', filter: grayscale ? 'grayscale(1)' : 'none' }}
+            >
+            {showTable ? (
+              <table className="w-full text-xs">
+                <caption className="mb-1 text-left text-gray-600">Requests by day and hour</caption>
+                <thead>
+                  <tr>
+                    <th className="border-b border-gray-300 p-1 text-left">Day</th>
+                    <th className="border-b border-gray-300 p-1 text-left">Hour</th>
+                    <th className="border-b border-gray-300 p-1 text-left">Requests</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {compareData.map((d, i) => (
+                    <tr key={i}>
+                      <td className="border-b border-gray-100 p-1">{d.row}</td>
+                      <td className="border-b border-gray-100 p-1">{d.col}</td>
+                      <td className="border-b border-gray-100 p-1">{d.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <Heatmap data={compareData} options={{ palette: 'viridis' }} />
+            )}
+          </div>
+          {!showTable && (
+            <p className="mt-1.5 text-center text-xs text-gray-500">Still readable by lightness alone</p>
+          )}
         </div>
       </div>
-
-      <label className="mt-6 flex items-center gap-2 text-sm text-gray-700">
-        <input
-          type="checkbox"
-          checked={showTable}
-          onChange={(e) => setShowTable(e.target.checked)}
-          className="accent-brand-accent"
-        />
-        Show accessible table view
-      </label>
-      <p className="mb-2 mt-1 text-xs text-gray-500">
-        This mirrors the ARIA-linked data table hueglint automatically generates for every chart, for
-        screen reader users — present whether or not this toggle is on.
-      </p>
-
-      {showTable && (
-        <table className="w-full max-w-md border-collapse text-sm">
-          <caption className="mb-1.5 text-left text-gray-700">Requests by day and hour</caption>
-          <thead>
-            <tr>
-              <th className="border-b border-gray-300 p-1 text-left">Day</th>
-              <th className="border-b border-gray-300 p-1 text-left">Hour</th>
-              <th className="border-b border-gray-300 p-1 text-left">Requests</th>
-            </tr>
-          </thead>
-          <tbody>
-            {compareData.map((d, i) => (
-              <tr key={i}>
-                <td className="border-b border-gray-200 p-1">{d.row}</td>
-                <td className="border-b border-gray-200 p-1">{d.col}</td>
-                <td className="border-b border-gray-200 p-1">{d.value}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
     </section>
   );
 }

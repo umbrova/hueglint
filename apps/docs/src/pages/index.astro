@@ -14,23 +14,44 @@ import '../styles/global.css';
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
   </head>
   <body class="font-sans text-gray-900 bg-white">
-    <main class="max-w-4xl mx-auto px-6 py-12">
-      <header class="mb-2">
-        <h1 class="text-3xl font-medium">
-          <span class="wordmark-hue">hue</span><span class="text-gray-800">glint</span>
-        </h1>
-      </header>
+    <header class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+      <div class="flex items-center gap-2.5">
+        <img src="/hueglint-icon.svg" alt="" class="h-9 w-9" />
+        <img src="/hueglint-word.svg" alt="hueglint" class="h-6" />
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/docs/getting-started/installation/" class="text-sm text-gray-600 hover:text-gray-900">Docs</a>
+        <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-4 py-1.5 text-sm text-white hover:bg-gray-800 transition">Get started</a>
+      </div>
+    </header>
 
-      <p class="text-gray-500 mb-8">Clarity, not just color.</p>
+    <main class="max-w-4xl mx-auto px-6 py-10">
+      <h1 class="text-3xl font-medium mb-2">Clarity, not just color.</h1>
+      <p class="text-gray-600 max-w-md mb-6">
+        CVD-safe by default, honest tooltips, native diff mode.
+      </p>
+      <div class="flex gap-3 mb-10">
+        <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">Get started</a>
+        <a href="https://github.com" class="rounded border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-800 hover:bg-gray-50 transition">View on GitHub</a>
+      </div>
+      <div class="mt-4 inline-flex items-center gap-3 rounded bg-gray-900 px-4 py-2 text-sm text-gray-100 font-mono">
+        <span>npm install @hueglint/core</span>
+        <button
+          onclick="navigator.clipboard.writeText('npm install @hueglint/core')"
+          class="text-gray-400 hover:text-white transition"
+          aria-label="Copy install command"
+        >
+          ⧉
+        </button>
+      </div>
 
       <Playground client:load />
 
-      <p class="mt-8">
-        <a href="/docs/getting-started/installation/" class="text-brand-accent font-medium hover:underline">
-          Get started →
-        </a>
+      <p class="text-center text-xs text-gray-500 mt-6">
+        Open source · MIT licensed · React today, Vue coming in a future release
       </p>
 
       <AccessibilityProof client:visible />
