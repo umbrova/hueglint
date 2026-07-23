@@ -8,7 +8,6 @@ Accessible-by-default heatmaps for the web. CVD-safe palettes, honest tooltips, 
 
 **[Try the live playground →](https://hueglint.umbrova.com)**
 
-> Pre-1.0 and not yet published to npm. Core, accessibility, diff mode, and the React adapter are built and tested; see Status below.
 
 
 ## Why hueglint
@@ -78,8 +77,8 @@ Full docs, live playground, and guides: [hueglint.umbrova.com](https://hueglint.
 
 - Core engine, accessibility suite, diff mode, responsive/touch-target behavior, and the React adapter are built and covered by an automated test suite (including `axe-core` in CI)
 - Deployed docs site with a live, interactive playground
-- **Not yet published to npm** — install via the monorepo for now if you want to try it before release
-- Versioned `0.0.x` — expect breaking changes before `1.0.0`
+- **Published to npm** — `@hueglint/core@1.0.1`, `@hueglint/react@1.0.0`
+
 
 ## Development
 
