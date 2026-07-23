@@ -39,5 +39,25 @@
     "typescript": "^5.5.0",
     "vitest": "^2.0.0"
   },
+"repository": {
+    "type": "git",
+    "url": "https://github.com/umbrova/hueglint.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://hueglint.umbrova.com",
+  "bugs": {
+    "url": "https://github.com/umbrova/hueglint/issues"
+  },
+  "author": "Umbrova",
+  "keywords": [
+    "heatmap",
+    "data-visualization",
+    "accessibility",
+    "a11y",
+    "react",
+    "colorblind",
+    "cvd-safe",
+    "viridis"
+  ],
   "license": "MIT"
 }
