@@ -4,12 +4,24 @@ export interface GridCellRef {
   colIndex: number;
 }
 
-// Temporary hardcoded value — becomes a themeable CSS custom property
-// once the Shadow DOM / theming work from the spec lands.
 const FOCUS_RING_COLOR = '#534AB7';
+
+function injectInteractionStyles(): void {
+  if (document.getElementById('hueglint-interaction-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'hueglint-interaction-styles';
+  style.textContent =
+    'svg[data-hueglint-root] rect { transition: filter .15s ease, transform .15s ease; ' +
+    'transform-box: fill-box; transform-origin: center; }' +
+    'svg[data-hueglint-root] rect:hover, svg[data-hueglint-root] rect:focus { ' +
+    'transform: scale(1.04); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }';
+  document.head.appendChild(style);
+}
 
 export function setupRovingTabindex(cells: GridCellRef[]): () => void {
   if (cells.length === 0) return () => {};
+
+  injectInteractionStyles();
 
   const grid = new Map<string, GridCellRef>();
   cells.forEach((c) => grid.set(`${c.rowIndex},${c.colIndex}`, c));
@@ -18,7 +30,7 @@ export function setupRovingTabindex(cells: GridCellRef[]): () => void {
   cells.forEach((c) => c.el.setAttribute('tabindex', c === active ? '0' : '-1'));
 
   function moveTo(next: GridCellRef | undefined) {
-    if (!next) return; // no neighbor that direction — stay put, don't error
+    if (!next) return;
     active.el.setAttribute('tabindex', '-1');
     active = next;
     active.el.setAttribute('tabindex', '0');
@@ -37,16 +49,30 @@ export function setupRovingTabindex(cells: GridCellRef[]): () => void {
 
   const cleanupFns: (() => void)[] = [];
   cells.forEach((c) => {
-    // Real focus/blur events (not just our own arrow-key handler) drive
-    // the visual ring, so it's correct no matter how focus arrives —
-    // Tab, a mouse click, or a screen reader's own navigation commands.
+    let priorStroke: string | null = null;
+    let priorStrokeWidth: string | null = null;
+
     const onFocus = () => {
+      priorStroke = c.el.getAttribute('stroke');
+      priorStrokeWidth = c.el.getAttribute('stroke-width');
       c.el.setAttribute('stroke', FOCUS_RING_COLOR);
       c.el.setAttribute('stroke-width', '2');
+      // Bring to front so the outward half of the stroke (and the
+      // hover/focus scale effect) isn't painted over by a neighboring
+      // cell drawn later in the SVG's paint order.
+      c.el.parentNode?.appendChild(c.el);
     };
     const onBlur = () => {
-      c.el.removeAttribute('stroke');
-      c.el.removeAttribute('stroke-width');
+      if (priorStroke !== null) {
+        c.el.setAttribute('stroke', priorStroke);
+      } else {
+        c.el.removeAttribute('stroke');
+      }
+      if (priorStrokeWidth !== null) {
+        c.el.setAttribute('stroke-width', priorStrokeWidth);
+      } else {
+        c.el.removeAttribute('stroke-width');
+      }
     };
     c.el.addEventListener('keydown', handleKeydown);
     c.el.addEventListener('focus', onFocus);
