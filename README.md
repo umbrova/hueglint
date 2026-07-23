@@ -4,7 +4,12 @@
 
 Accessible-by-default heatmaps for the web. CVD-safe palettes, honest tooltips, native diff mode, and a screen-reader-friendly data table — all on by default, not bolted on.
 
+![hueglint: the same data, typical heatmap vs. hueglint, under a colorblind-vision simulation](.github/assets/accessibility-demo.gif)
+
+**[Try the live playground →](https://hueglint.umbrova.com)**
+
 > Pre-1.0 and not yet published to npm. Core, accessibility, diff mode, and the React adapter are built and tested; see Status below.
+
 
 ## Why hueglint
 
