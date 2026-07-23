@@ -1,6 +1,6 @@
 {
   "name": "@hueglint/react",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "React bindings for hueglint",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -22,7 +22,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@hueglint/core": "workspace:*"
+    "@hueglint/core": "workspace:^"
   },
   "peerDependencies": {
     "react": ">=18"
