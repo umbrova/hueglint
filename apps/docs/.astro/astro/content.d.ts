@@ -157,35 +157,42 @@ declare module 'astro:content' {
   slug: "docs/core-concepts/accessibility";
   body: string;
   collection: "docs";
-  data: InferEntrySchema<"docs">
+  data: any
 } & { render(): Render[".md"] };
 "docs/core-concepts/data-format.md": {
 	id: "docs/core-concepts/data-format.md";
   slug: "docs/core-concepts/data-format";
   body: string;
   collection: "docs";
-  data: InferEntrySchema<"docs">
+  data: any
+} & { render(): Render[".md"] };
+"docs/core-concepts/diff-mode.md": {
+	id: "docs/core-concepts/diff-mode.md";
+  slug: "docs/core-concepts/diff-mode";
+  body: string;
+  collection: "docs";
+  data: any
 } & { render(): Render[".md"] };
 "docs/core-concepts/handling-errors.md": {
 	id: "docs/core-concepts/handling-errors.md";
   slug: "docs/core-concepts/handling-errors";
   body: string;
   collection: "docs";
-  data: InferEntrySchema<"docs">
+  data: any
 } & { render(): Render[".md"] };
 "docs/getting-started/installation.md": {
 	id: "docs/getting-started/installation.md";
   slug: "docs/getting-started/installation";
   body: string;
   collection: "docs";
-  data: InferEntrySchema<"docs">
+  data: any
 } & { render(): Render[".md"] };
 "docs/index.mdx": {
 	id: "docs/index.mdx";
   slug: "docs";
   body: string;
   collection: "docs";
-  data: InferEntrySchema<"docs">
+  data: any
 } & { render(): Render[".mdx"] };
 };
 
@@ -197,5 +204,5 @@ declare module 'astro:content' {
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	export type ContentConfig = typeof import("./../../src/content/config.js");
+	export type ContentConfig = never;
 }
