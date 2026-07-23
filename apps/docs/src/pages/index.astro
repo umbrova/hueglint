@@ -16,14 +16,18 @@ import '../styles/global.css';
     />
   </head>
   <body class="font-sans text-gray-900 bg-white">
-    <header class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+    <header class="flex items-center justify-between px-6 py-5 border-b border-gray-100 shadow-sm">
       <div class="flex items-center gap-2.5">
         <img src="/hueglint-icon.svg" alt="" class="h-9 w-9" />
         <img src="/hueglint-word.svg" alt="hueglint" class="h-7" />
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-5">
         <a href="/docs/" class="text-sm text-gray-600 hover:text-gray-900">Docs</a>
-        <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-4 py-1.5 text-sm text-white hover:bg-gray-800 transition">Get started</a>
+        <a href="https://github.com/umbrova/hueglint" aria-label="View source on GitHub" class="text-gray-600 hover:text-gray-900">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+            <path d="M12 .5C5.7.5.5 5.7.5 12c0 5 3.3 9.3 7.9 10.8.6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A10.5 10.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/>
+          </svg>
+        </a>
       </div>
     </header>
 
@@ -32,32 +36,61 @@ import '../styles/global.css';
       <p class="text-gray-600 max-w-md mb-6">
         CVD-safe by default, honest tooltips, native diff mode.
       </p>
-      <div class="flex gap-3 mb-4">
-        <a href="/docs/getting-started/installation/" class="rounded bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">Get started</a>
-        <a href="https://github.com/umbrova/hueglint/" class="rounded border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-800 hover:bg-gray-50 transition">View on GitHub</a>
-      </div>
-      <div class="mb-10 inline-flex items-center gap-3 rounded bg-gray-900 px-4 py-2 text-sm text-gray-100 font-mono">
-        <span>npm install @hueglint/core</span>
-        <button
-          onclick="navigator.clipboard.writeText('npm install @hueglint/core')"
-          class="text-gray-400 hover:text-white transition"
-          aria-label="Copy install command"
-        >
-          ⧉
-        </button>
+      <div class="flex flex-wrap items-center gap-3 mb-8">
+        <a href="/docs/getting-started/installation/" class="rounded bg-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">Get started</a>
       </div>
 
+      <p class="text-xs font-medium uppercase tracking-wide text-gray-400 mb-2">Install</p>
+
+      <div class="mb-3">
+        <div class="inline-flex text-xs rounded-t overflow-hidden">
+          <button id="tab-core" class="px-3 py-1 bg-gray-700 text-white transition">Core</button>
+          <button id="tab-react" class="px-3 py-1 bg-gray-300 text-gray-700 transition">React</button>
+        </div>
+        <div class="flex items-center gap-2 rounded-b rounded-tr bg-gray-700 px-4 py-2.5 text-sm text-gray-100 font-mono">
+          <span id="install-command">npm install @hueglint/core</span>
+          <button id="copy-btn" class="text-gray-300 hover:text-white transition" aria-label="Copy install command">⧉</button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-10">
+        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">React</span>
+        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">Vanilla JS</span>
+        <span class="rounded-full bg-gray-50 px-3 py-1 text-xs text-gray-400">Vue — coming soon</span>
+      </div>
+      <script>
+        const commands = {
+          core: 'npm install @hueglint/core',
+          react: 'npm install @hueglint/react',
+        };
+        const tabCore = document.getElementById('tab-core')!;
+        const tabReact = document.getElementById('tab-react')!;
+        const commandEl = document.getElementById('install-command')!;
+        const copyBtn = document.getElementById('copy-btn')!;
+        let current: keyof typeof commands = 'core';
+
+        function setTab(tab: keyof typeof commands) {
+          current = tab;
+          commandEl.textContent = commands[tab];
+          const active = tab === 'core' ? tabCore : tabReact;
+          const inactive = tab === 'core' ? tabReact : tabCore;
+          active.classList.add('bg-gray-700', 'text-white');
+          active.classList.remove('bg-gray-300', 'text-gray-700');
+          inactive.classList.add('bg-gray-300', 'text-gray-700');
+          inactive.classList.remove('bg-gray-700', 'text-white');
+        }
+
+        tabCore.addEventListener('click', () => setTab('core'));
+        tabReact.addEventListener('click', () => setTab('react'));
+        copyBtn.addEventListener('click', () => navigator.clipboard.writeText(commands[current]));
+      </script>
       <Playground client:load />
-
-      <p class="text-center text-xs text-gray-500 mt-6">
-        Open source · MIT licensed · React today, Vue coming in a future release
-      </p>
 
       <AccessibilityProof client:visible />
     </main>
 
     <footer class="mt-16 border-t border-gray-100 py-6 text-center text-sm text-gray-500">
-      <p>hueglint · MIT licensed · <a href="https://github.com/umbrova/hueglint/" class="hover:text-gray-800">GitHub</a> · <a href="/docs/getting-started/installation/" class="hover:text-gray-800">Docs</a></p>
+      <p>hueglint · MIT licensed · <a href="https://github.com/umbrova/hueglint" class="hover:text-gray-800">GitHub</a> · <a href="/docs/getting-started/installation/" class="hover:text-gray-800">Docs</a></p>
     </footer>
 
     <style>
