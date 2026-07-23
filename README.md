@@ -92,4 +92,4 @@ pnpm turbo build test lint
 
 ## License
 
-MIT © [Your name] — part of the [Umbrova](https://umbrova.com) family of tools.
+MIT © [Umbrova] — part of the [Umbrova](https://umbrova.com) family of tools.
