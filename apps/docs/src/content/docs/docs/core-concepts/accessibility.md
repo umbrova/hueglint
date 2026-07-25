@@ -37,6 +37,11 @@ Every cell has an accessible name via `aria-label` describing its row, column, a
 
 ## Configuring for your own audience
 
+```js
+// Disable touch-target protection to render every cell at full resolution
+const chart = new Heatmap(el, { minCellSize: 1 });
+```
+
 - `minCellSize` — the default 44px touch-target floor exists for touch accessibility. It's configurable, not fixed, because it's a usability recommendation for one interaction mode (touch), not a correctness guarantee — a desktop-only dense overview chart may reasonably use a smaller value. Lowering it is a real, visible tradeoff (worse tap precision), not a free option, so make that choice deliberately rather than by default.
 - `ariaLabelFormatter` and `summaryFormatter` — override the per-cell and chart-level text for domain-specific terminology, using either a simple template string or a full formatter function.
 

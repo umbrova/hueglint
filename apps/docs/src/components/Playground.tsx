@@ -123,7 +123,7 @@ export default function Playground() {
             onChange={(e) => setShowTable(e.target.checked)}
             className="accent-brand-accent"
           />
-          Table view
+          Table view  (demo only — not a hueglint API)
         </label>
       </div>
     </div>
